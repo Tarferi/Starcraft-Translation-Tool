@@ -3,11 +3,18 @@ using System.IO;
 using System.Text;
 
 namespace WpfApplication1 {
+    class OutOfBoundsReadException : Exception {
+
+    }
+
     class ReadBuffer {
 
         private MemoryStream me;
 
         public int readByte() {
+            if(me.Length - me.Position == 0) {
+                throw new OutOfBoundsReadException();
+            }
             return me.ReadByte();
         }
 

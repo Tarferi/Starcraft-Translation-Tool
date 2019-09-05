@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Right" Margin="10,12,0,0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblCurrentVersion, Mode=OneWay, FallbackValue=[CurrentVersion]}" VerticalAlignment="Top"/>
         <TextBlock x:Name="textBlock2" HorizontalAlignment="Right" Margin="10,40,0,0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblRemoteVersion, Mode=OneWay, FallbackValue=[RemoteVersion]}" VerticalAlignment="Top"/>
-        <TextBox IsReadOnly="True" x:Name="txtLocalVersion" Height="23" Margin="5,9,5,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox IsReadOnly="True" x:Name="txtLocalVersion" Height="23" Margin="5,9,5,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1" MouseRightButtonUp="txtLocalVersion_MouseRightButtonUp"/>
         <TextBox IsReadOnly="True" x:Name="txtRemoteVersion" Height="23" Margin="5,37,5,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"/>
         <Button x:Name="btnGet" Content="{Binding RelLanguage.BtnUpdate, Mode=OneWay, FallbackValue=[Update]}" Grid.Column="2" HorizontalAlignment="Left" Margin="0,10,10,0" VerticalAlignment="Top" Width="75" Height="50" Click="btnGet_Click"/>
         <TextBlock x:Name="textBlock2_Copy" HorizontalAlignment="Right" Margin="10,68,0,0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblUpdateProgress, FallbackValue=[UpdateProgress], Mode=OneWay}" VerticalAlignment="Top"/>

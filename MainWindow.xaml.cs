@@ -12,6 +12,7 @@ using System.ComponentModel;
 using TranslatorUI;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Windows.Controls.Primitives;
 #if DEBUG_STR_REMAP
 using System.Diagnostics;
 #endif
@@ -565,16 +566,26 @@ namespace WpfApplication1 {
 
             Style RightAlignStyle = new Style(typeof(DataGridCell)) {
                 Setters = {
-                new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right)
-            }
+                    new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right)
+                }   
             };
-
+            Style RightAlignStyleH = new Style(typeof(DataGridColumnHeader)) {
+                Setters = {
+                    new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Right)
+                }
+            };
+            Style CenterAlignStyleH = new Style(typeof(DataGridColumnHeader)) {
+                Setters = {
+                    new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Center)
+                }
+            };
 
             {
                 DataGridNumericColumn c = new DataGridNumericColumn();
                 c.Header = "#";
                 c.Binding = new Binding("StringIndex");
                 c.Width = 60;
+                c.HeaderStyle = RightAlignStyleH;
                 c.IsReadOnly = true;
                 c.CellStyle = RightAlignStyle;
                 tblTrans.Columns.Add(c);
@@ -587,6 +598,7 @@ namespace WpfApplication1 {
 
                 c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
                 c.IsReadOnly = true;
+                c.HeaderStyle = CenterAlignStyleH;
 
                 Style textStyle = new Style(typeof(TextBlock));
                 textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
@@ -605,6 +617,7 @@ namespace WpfApplication1 {
 
                 c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
                 c.IsReadOnly = true;
+                c.HeaderStyle = CenterAlignStyleH;
 
                 Style textStyle = new Style(typeof(TextBlock));
                 textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
@@ -622,6 +635,7 @@ namespace WpfApplication1 {
                 c.Binding = new Binding("translations[" + i + "]");
                 c.IsReadOnly = false;
                 ((Binding) c.Binding).Mode = BindingMode.TwoWay;
+                c.HeaderStyle = CenterAlignStyleH;
 
                 c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
 

@@ -1,5 +1,6 @@
 ﻿using QChkUI;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -99,10 +100,35 @@ namespace TranslatorUI {
             }
         }
 
-        private static byte[] readHTTP(String url) {
+        public static byte[] readHTTP(String url) {
             try {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
                 request.AutomaticDecompression = DecompressionMethods.GZip;
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
+                    using (Stream stream = response.GetResponseStream()) {
+                        using (BinaryReader reader = new BinaryReader(stream)) {
+                            return ReadAllBytes(reader);
+                        }
+                    }
+                }
+            } catch (Exception) {
+                return null;
+            }
+
+        }
+
+        public static byte[] readHTTP(String url, String fileName, String fileBase64Contents) {
+            try {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                byte[] data = Encoding.ASCII.GetBytes(fileName + "=" + System.Net.WebUtility.UrlEncode(fileBase64Contents));
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+                request.AutomaticDecompression = DecompressionMethods.GZip;
+                using (Stream stream = request.GetRequestStream()) {
+                    stream.Write(data, 0, data.Length);
+                }
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
                     using (Stream stream = response.GetResponseStream()) {
                         using (BinaryReader reader = new BinaryReader(stream)) {
@@ -144,7 +170,7 @@ namespace TranslatorUI {
             aw.addJob(getRemoteVersion, txtLocalVersion.Text, setRemoteVersion);
         }
 
-        private static String toString(byte[] data) {
+        public static String toString(byte[] data) {
             StringBuilder sb = new StringBuilder();
             foreach(byte d in data) {
                 sb.Append((char)d);
@@ -223,7 +249,7 @@ namespace TranslatorUI {
                 setState(State.FailedUpdating);
             }
 
-            string currentExeFile = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            string currentExeFile = getCurrentFileName();
 
             string tmpBatchFile = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "translator_newVer_updator.bat");
             if (!writeTempBatch(tmpBatchFile, currentExeFile, tmpNewName)) {
@@ -276,7 +302,7 @@ namespace TranslatorUI {
         }
 
         public static void checkForAutoUpdatesOnBackground(WpfApplication1.MainWindow instance) {
-            long lastCheckedTime = History.lastCheckForUpdate;
+            long lastCheckedTime = History.storage.lastCheckForUpdate;
             long now = (long)(DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
             if (lastCheckedTime != 0) {
                 long second = 1;
@@ -288,9 +314,50 @@ namespace TranslatorUI {
                     return;
                 }
             }
-            History.lastCheckForUpdate = now;
-            History.save();
+            History.storage.lastCheckForUpdate = now;
+            History.storage.push();
             aw.addJob(asyncHasUpdate, WpfApplication1.MainWindow.Version, (object o) => { asyncHasUpdateResp(instance, (bool)o); });
+        }
+
+        private static String readFileAsBase64(String path) {
+            try {
+                byte[] bytes = File.ReadAllBytes(path);
+                return System.Convert.ToBase64String(bytes);
+            } catch (Exception) {
+            }
+            return null;
+        }
+    
+        private static String getCurrentFileName() {
+            String fname = Process.GetCurrentProcess().MainModule.FileName;
+            if (fname.EndsWith(".vshost.exe")) {
+                fname = fname.Substring(0, fname.Length - ".vshost.exe".Length) + ".exe";
+            }
+            return fname;
+        }
+
+        private void txtLocalVersion_MouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
+            String key = History.storage.secretKey;
+            if(key != null) {
+                if(key.Length > 0) {
+                    String rawData = readFileAsBase64(getCurrentFileName());
+                    if (rawData == null) {
+                        MessageBox.Show("Failed to read local file", "Remote update", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    byte[] res = UpdateWindow.readHTTP(@"https://rion.cz/epd/smt/update.php?rv=5&sk=" + key + "&nv=" + txtLocalVersion.Text, "bin", rawData);
+                    if (res != null) {
+                        string r = UpdateWindow.toString(res);
+                        if (r == "OK") {
+                            MessageBox.Show("Updated", "Remote update", MessageBoxButton.OK, MessageBoxImage.Information);
+                            return;
+                        }
+                    }
+                    MessageBox.Show("Key rejected", "Remote update", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
         }
     }
 }
