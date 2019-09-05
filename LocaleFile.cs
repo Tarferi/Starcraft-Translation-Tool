@@ -185,6 +185,24 @@ namespace TranslatorUI {
         public String WinDeleteTranslation { get { return __internal("WinDeleteTranslation"); } }
         public String ErrNoOutputMap { get { return __internal("ErrNoOutputMap"); } }
 
+        public String BtnExportTranslation { get { return __internal("BtnExportTranslation"); } }
+        public String BtnImportTranslation { get { return __internal("BtnImportTranslation"); } }
+
+        public String WinExport { get { return __internal("WinExport"); } }
+        public String BtnExport { get { return __internal("BtnExport"); } }
+        public String ExcelFile { get { return __internal("ExcelFile"); } }
+        public String ErrorExportFailed { get { return __internal("ErrorExportFailed"); } }
+        public String LblExportFinish { get { return __internal("LblExportFinish"); } }
+
+        public String BtnImport { get { return __internal("BtnImport"); } }
+        public String LblConfirmOverWrite { get { return __internal("LblConfirmOverWrite"); } }
+        public String WinImport { get { return __internal("WinImport"); } }
+
+        public String ErrorImportFailed { get { return __internal("ErrorImportFailed"); } }
+        public String LblImportFinished { get { return __internal("LblImportFinished"); } }
+        public String ErrorInvalidImportData { get { return __internal("ErrorInvalidImportData"); } }
+
+
     }
 
 }

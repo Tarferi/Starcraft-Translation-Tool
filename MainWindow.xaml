@@ -70,8 +70,18 @@
 
         <GroupBox Margin="0,0,10,61" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Height="90" HorizontalAlignment="Right" Width="282" Header="{Binding RelLanguage.WinControl, Mode=OneWay, FallbackValue=[Control]}">
             <Grid>
-                <Button x:Name="btnAddTranslation" Content="{Binding RelLanguage.BtnAddTranslation, Mode=OneWay, FallbackValue=[AddTranslation]}" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Width="112" Click="button1_Click" Height="25" RenderTransformOrigin="0.262,0.893"/>
-                <Button x:Name="btnDeleteTranslation" Content="{Binding RelLanguage.BtnRemoveTranslation, Mode=OneWay, FallbackValue=[RemoveTranslation]}" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="112" Click="btnDeleteTranslation_Click" Height="25"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Button x:Name="btnAddTranslation" Content="{Binding RelLanguage.BtnAddTranslation, Mode=OneWay, FallbackValue=[AddTranslation]}" Margin="10,7,10,3" Click="button1_Click" />
+                <Button x:Name="btnDeleteTranslation" Content="{Binding RelLanguage.BtnRemoveTranslation, Mode=OneWay, FallbackValue=[RemoveTranslation]}" Margin="10,5" Click="btnDeleteTranslation_Click" Grid.Row="1"/>
+                <Button x:Name="btnExportTranslation" Content="{Binding RelLanguage.BtnExportTranslation, FallbackValue=[ExportTranslation], Mode=OneWay}" Margin="5,7,10,3" Grid.Column="1" Click="btnExportTranslation_Click"/>
+                <Button x:Name="btnImportTranslation" Content="{Binding RelLanguage.BtnImportTranslation, FallbackValue=[ImportTranslation], Mode=OneWay}" Margin="5,5,10,5" Grid.Column="1" Grid.Row="1" Click="btnImportTranslation_Click"/>
 
             </Grid>
         </GroupBox>

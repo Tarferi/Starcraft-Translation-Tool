@@ -13,6 +13,9 @@ using TranslatorUI;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Controls.Primitives;
+using OfficeOpenXml;
+using Microsoft.VisualBasic.CompilerServices;
+using System.IO;
 #if DEBUG_STR_REMAP
 using System.Diagnostics;
 #endif
@@ -39,6 +42,10 @@ namespace WpfApplication1 {
         public MainWindow() {
             InitializeComponent();
             setLanguage("en");
+
+            tblTrans.EnableColumnVirtualization = true;
+            tblTrans.EnableRowVirtualization = true;
+
             setState(AppState.START);
             History.open(txtSet.Name, txtSet);
             History.open(txtInMap.Name, txtInMap);
@@ -107,7 +114,6 @@ namespace WpfApplication1 {
                 brwsBtnSettings.IsEnabled = true;
                 txtSet.IsEnabled = true;
                 brwsBtnSaveSettings.Content = RelLanguage.BtnOpen;
-
                 clearTable();
             } else if (state == AppState.PICK_MAP) {
                 brwsBtnSaveSettings.Content = RelLanguage.BtnClose;
@@ -119,14 +125,12 @@ namespace WpfApplication1 {
                 clearTable();
             } else if (state == AppState.LOADING_MAP) {
                 clearTable();
-
                 progress.IsEnabled = true;
                 progress.Visibility = Visibility.Visible;
             } else if(state == AppState.PROCESSING) {
                 btnOpenMap.Content = RelLanguage.BtnUnload;
                 brwsBtnSaveSettings.Content = RelLanguage.BtnClose;
                 brwsBtnSettings.Content = RelLanguage.BtnSave;
-
                 progress.IsEnabled = true;
                 progress.Visibility = Visibility.Visible;
 
@@ -161,6 +165,9 @@ namespace WpfApplication1 {
                 rdSwitches.IsEnabled = true;
 
                 btnCheckCond.IsEnabled = true;
+
+                btnExportTranslation.IsEnabled = true;
+                btnImportTranslation.IsEnabled = true;
             }
         }
 
@@ -200,6 +207,10 @@ namespace WpfApplication1 {
 
             progress.IsEnabled = false;
             progress.Visibility = Visibility.Collapsed;
+
+
+            btnExportTranslation.IsEnabled = false;
+            btnImportTranslation.IsEnabled = false;
         }
 
         private void clearTable() {
@@ -559,7 +570,7 @@ namespace WpfApplication1 {
 
         private void setStrings(Settings settings) {
 
-            IDisposable d = Dispatcher.DisableProcessing();
+            //IDisposable d = Dispatcher.DisableProcessing();
             clearTable();
 
             int width = (int) tblTrans.ActualWidth;
@@ -650,12 +661,16 @@ namespace WpfApplication1 {
                 
             }
 
-            for(int i = 0; i < settings.ts.Length; i++) {
+            tblTrans.ItemsSource = null;
+
+            for (int i = 0; i < settings.ts.Length; i++) {
                 TranslateString ms = settings.ts[i];
                 Values.Add(ms);
             }
 
-            if(settings.useCondition < 256) { // Switch
+            tblTrans.ItemsSource = Values;
+
+            if (settings.useCondition < 256) { // Switch
                 rdSwitches.IsChecked = true;
                 rdDeaths.IsChecked = false;
                 cmbSwitches.SelectedIndex = settings.useCondition;
@@ -669,15 +684,14 @@ namespace WpfApplication1 {
             }
 
 
-            d.Dispose();
+            //d.Dispose();
 
             applyFilters();
             fireTableUpdate();
         }
 
         private void applyFilters() {
-            IDisposable d = Dispatcher.DisableProcessing();
-
+            //IDisposable d = Dispatcher.DisableProcessing();
 
             ICollectionView Itemlist = CollectionViewSource.GetDefaultView(tblTrans);
             Predicate<object> predicate;
@@ -707,7 +721,7 @@ namespace WpfApplication1 {
                 return false;
             });
             tblTrans.Items.Filter = predicate;
-            d.Dispose();
+            //d.Dispose();
             fireTableUpdate();
         }
 
@@ -820,13 +834,15 @@ namespace WpfApplication1 {
         }
 
         private void brwsBtnSaveSettings_Click(object sender, RoutedEventArgs e) { // Open settings clicked
-            if (state == AppState.START) { // First load, open
-                _syncTryLoadBegin();
-            } else if (state == AppState.PICK_MAP) { // Picking map, close
-                setState(AppState.START);
-            } else if (state == AppState.READY) { // Awaiting input, close
-                setState(AppState.START);
-            }
+           // using (Dispatcher.DisableProcessing()) {
+                if (state == AppState.START) { // First load, open
+                    _syncTryLoadBegin();
+                } else if (state == AppState.PICK_MAP) { // Picking map, close
+                    setState(AppState.START);
+                } else if (state == AppState.READY) { // Awaiting input, close
+                    setState(AppState.START);
+                }
+           // }
         }
 
         private static readonly Regex _regex = new Regex("^-?[0-9]+$"); //regex that matches disallowed text
@@ -839,14 +855,16 @@ namespace WpfApplication1 {
         }
 
         private void btnOpenMap_Click(object sender, RoutedEventArgs e) { // Load map click button (can also be close map)
-            if (state == AppState.PICK_MAP) { // Load
-                String map = getComboBox(txtInMap);
-                if (map.Length > 0) {
-                    tryLoadingGivenMap(getSettings(), true, AppState.PICK_MAP);
+            //using ( Dispatcher.DisableProcessing()) {
+                if (state == AppState.PICK_MAP) { // Load
+                    String map = getComboBox(txtInMap);
+                    if (map.Length > 0) {
+                        tryLoadingGivenMap(getSettings(), true, AppState.PICK_MAP);
+                    }
+                } else if (state == AppState.READY) { // Unload
+                    setState(AppState.PICK_MAP);
                 }
-            } else if (state == AppState.READY) { // Unload
-                setState(AppState.PICK_MAP);
-            }
+           //}
         }
 
         private String getSettingsFile() {
@@ -857,7 +875,7 @@ namespace WpfApplication1 {
             return getFile(RelLanguage.WinOpenMapDialogTitle, new String[] { "scx", "scm" }, new String[] {RelLanguage.BwMapName, RelLanguage.ScMapName });
         }
 
-        private static String getFile(String title, String[] extension, String[] extensionDescriptions) {
+        public static String getFile(String title, String[] extension, String[] extensionDescriptions) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
 
@@ -883,9 +901,12 @@ namespace WpfApplication1 {
         }
 
         private void brwsBtnSettings_Click(object sender, RoutedEventArgs e) {
+            
             if (state == AppState.READY) { // Save
                 Settings set = getSettings(); // Scrap settings from UI
-                set.saveToFile(set.settingsPath);
+                using (Dispatcher.DisableProcessing()) {
+                    set.saveToFile(set.settingsPath);
+                }
                 setSettings(set);
                 MessageBox.Show(RelLanguage.LblSettingsSaved, RelLanguage.WinSaveSettings, MessageBoxButton.OK, MessageBoxImage.Information);
             } else {
@@ -898,11 +919,13 @@ namespace WpfApplication1 {
         }
 
         private void brwsBtnInMap_Click(object sender, RoutedEventArgs e) {
-            String f = getMapFile();
-            if (f != null) {
-                setComboText(txtInMap, f);
-                btnOpenMap_Click(sender, null);
+            using (Dispatcher.DisableProcessing()) {
+                String f = getMapFile();
+                if (f != null) {
+                    setComboText(txtInMap, f);
+                }
             }
+            btnOpenMap_Click(sender, null);
         }
 
         private void brwsBtnOutMap_Click(object sender, RoutedEventArgs e) {
@@ -921,6 +944,7 @@ namespace WpfApplication1 {
                 String filePath = openFileDialog.FileName;
                 setComboText(txtOutMap, filePath);
             }
+         
         }
 
         private void checkLocations_Checked(object sender, RoutedEventArgs e) {
@@ -1006,15 +1030,17 @@ namespace WpfApplication1 {
         }
 
         private void button1_Click(object sender, RoutedEventArgs e) {
-            Settings settings = getSettings();
-
             String[] translations = new String[settings.langauges.Length];
-            for(int i = 0; i < settings.langauges.Length; i++) {
-                translations[i] = settings.langauges[i];
+            using (Dispatcher.DisableProcessing()) {
+                Settings settings = getSettings();
+                
+                for (int i = 0; i < settings.langauges.Length; i++) {
+                    translations[i] = settings.langauges[i];
+                }
             }
-
             AddTranslationDialog dialog = new AddTranslationDialog(RelLanguage, translations, createNewLangaugeCB);
             dialog.ShowDialog();
+            
         }
 
         private void deleteLangaugeCB(String languageName) {
@@ -1054,13 +1080,13 @@ namespace WpfApplication1 {
         }
 
         private void btnDeleteTranslation_Click(object sender, RoutedEventArgs e) {
-            Settings settings = getSettings();
-
             String[] translations = new String[settings.langauges.Length];
-            for (int i = 0; i < settings.langauges.Length; i++) {
-                translations[i] = settings.langauges[i];
+            using (Dispatcher.DisableProcessing()) {
+                Settings settings = getSettings();
+                for (int i = 0; i < settings.langauges.Length; i++) {
+                    translations[i] = settings.langauges[i];
+                }
             }
-
             DeleteTranslationDialog dialog = new DeleteTranslationDialog(RelLanguage, translations, deleteLangaugeCB);
             dialog.ShowDialog();
         }
@@ -1085,12 +1111,14 @@ namespace WpfApplication1 {
         }
 
         private void btnCheckCond_Click(object sender, RoutedEventArgs e) {
+            //using (Dispatcher.DisableProcessing()) {
             Settings set = getSettings();
             if (!TheLib.checkUsedCondition(set)) {
                 showErrorMessageBox(RelLanguage.WinTranslation, RelLanguage.ErrGuardCannotBeUsed);
             } else {
                 MessageBox.Show(RelLanguage.LblGuardCanBeUsed, RelLanguage.WinTranslation, MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            //}
         }
 
         private void tblTrans_PreviewKeyDown(object sender, KeyEventArgs e) {
@@ -1127,6 +1155,160 @@ namespace WpfApplication1 {
 
         private void MenuItem_Click_5(object sender, RoutedEventArgs e) {
             setLanguage("ko");
+        }
+
+        private void exportCB(Settings settings, String translation, String filePath) {
+            try {
+                using (var package = new ExcelPackage()) {
+                    // Add a new worksheet to the empty workbook
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Inventory");
+
+                    Func<int, string> numToAlphaC = (int val) => { return "" + (char)(((byte)'A') + val); };
+                    Func<int, string> numToAlphaT = null;
+                    numToAlphaT = (int val) => { return val < 9 ? numToAlphaC(val) : numToAlphaT(val / 10) + numToAlphaC(val % 10); };
+                    Func<int, string> numToAlpha = (int val) => { return numToAlphaT(val); };
+
+                    Func<int, int, string> cell = (int x, int y) => numToAlpha(x) + y.ToString();
+
+                    //Add the headers
+                    worksheet.Cells[cell(1, 1)].Value = "String ID";
+                    worksheet.Cells[cell(2, 1)].Value = "Original String";
+                    worksheet.Cells[cell(3, 1)].Value = "Usage";
+                    worksheet.Cells[cell(4, 1)].Value = "Translated String";
+
+                    // Find language ID
+                    int languageID = -1;
+                    for (int i = 0; i < settings.langauges.Length; i++) {
+                        if (settings.langauges[i] == translation) {
+                            languageID = i;
+                        }
+                    }
+                    if (languageID == -1) {
+                        showErrorMessageBox(RelLanguage.WinExport, RelLanguage.ErrorExportFailed);
+                    }
+
+                    for (int i = 0; i < settings.originalStrings.Length; i++) {
+                        TranslateString str = settings.ts[i];
+
+                        worksheet.Cells[cell(1, 2 + i)].Value = str.StringIndex.ToString();
+                        worksheet.Cells[cell(2, 2 + i)].Value = str.OriginalContents;
+                        worksheet.Cells[cell(3, 2 + i)].Value = str.description;
+                        worksheet.Cells[cell(4, 2 + i)].Value = str.translations[languageID];
+                    }
+
+                    worksheet.Name = translation;
+
+                    // set some document properties
+                    package.Workbook.Properties.Title = "Starcraft Map Translation File";
+                    package.Workbook.Properties.Author = "Starcraft Map Translation Tool By Tarferi";
+                    package.Workbook.Properties.Comments = "This file contains translation strings for a starcraft map";
+
+                    System.IO.FileInfo xlFile = new System.IO.FileInfo(filePath);
+
+                    package.SaveAs(xlFile);
+
+                    MessageBox.Show(RelLanguage.LblExportFinish, RelLanguage.WinExport, MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            } catch (Exception) {
+                showErrorMessageBox(RelLanguage.WinExport, RelLanguage.ErrorExportFailed);
+            }
+        }
+ 
+        private void btnExportTranslation_Click(object sender, RoutedEventArgs e) {
+            String[] translations = new String[settings.langauges.Length];
+            using (Dispatcher.DisableProcessing()) {
+                Settings settings = getSettings();
+                for (int i = 0; i < settings.langauges.Length; i++) {
+                    translations[i] = settings.langauges[i];
+                }
+            }
+            ExportWindow dialog = new ExportWindow(RelLanguage, translations, (String translation, String filePath) => { exportCB(settings, translation, filePath); });
+            dialog.ShowDialog();
+        }
+
+        private void importCB(Settings settings, String translation, String filePath) {
+            try {
+                FileInfo existingFile = new FileInfo(filePath);
+                using (ExcelPackage package = new ExcelPackage(existingFile)) {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+
+                    Func<int, string> numToAlphaC = (int val) => { return "" + (char)(((byte)'A') + val); };
+                    Func<int, string> numToAlphaT = null;
+                    numToAlphaT = (int val) => { return val < 9 ? numToAlphaC(val) : numToAlphaT(val / 10) + numToAlphaC(val % 10); };
+                    Func<int, string> numToAlpha = (int val) => { return numToAlphaT(val); };
+
+                    Func<int, int, string> cell = (int x, int y) => numToAlpha(x) + y.ToString();
+
+                    Func<int, int, string, bool> cellContains = (int x, int y, string str) => { return worksheet.Cells[cell(x, y)].Value.ToString() == str; };
+
+                    // Verify that it's our format
+                    bool isOurs = true;
+                    isOurs &= cellContains(1, 1, "String ID");
+                    isOurs &= cellContains(2, 1, "Original String");
+                    isOurs &= cellContains(3, 1, "Usage");
+                    isOurs &= cellContains(4, 1, "Translated String");
+
+                    for (int i = 0; i < settings.originalStrings.Length; i++) {
+                        TranslateString str = settings.ts[i];
+                        isOurs &= cellContains(1, 2 + i, str.StringIndex.ToString());
+                        isOurs &= cellContains(2, 2 + i, str.OriginalContents.Replace("\r\n","\n"));
+                        isOurs &= cellContains(3, 2 + i, str.description.Replace("\r\n", "\n"));
+                        if (!isOurs) {
+                            break;
+                        }
+                    }
+
+                    if (!isOurs) {
+                        showErrorMessageBox(RelLanguage.WinImport, RelLanguage.ErrorImportFailed);
+                        return;
+                    }
+
+                    // Find languageID
+                    String[] newLanguages = new String[settings.langauges.Length + 1];
+                    String[][] newStrings = new String[settings.langauges.Length + 1][];
+                    int languageID = settings.langauges.Length;
+                    for (int i= 0; i < settings.langauges.Length; i++) {
+                        if (settings.langauges[i] == translation) {
+                            languageID = i;
+                            newLanguages = settings.langauges;
+                            newStrings = settings.strings;
+                            break;
+                        } else {
+                            newLanguages[i] = settings.langauges[i];
+                            newStrings[i] = settings.strings[i];
+                        }
+                    }
+
+                    newLanguages[languageID] = translation;
+                    newStrings[languageID] = new String[settings.originalStrings.Length];
+
+                    for(int i = 0; i < settings.originalStrings.Length; i++) {
+                        String item = (String) worksheet.Cells[cell(4, 2 + i)].Value;
+                        newStrings[languageID][i] = item.Replace("\r", "").Replace("\n", "\r\n");
+                    }
+
+                    settings.langauges = newLanguages;
+                    settings.strings = newStrings;
+
+                    setStrings(settings);
+                    MessageBox.Show(RelLanguage.LblImportFinished, RelLanguage.WinImport, MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
+            } catch (Exception) {
+                showErrorMessageBox(RelLanguage.WinImport, RelLanguage.ErrorImportFailed);
+            }
+        }
+
+        private void btnImportTranslation_Click(object sender, RoutedEventArgs e) {
+            String[] translations = new String[settings.langauges.Length];
+            using (Dispatcher.DisableProcessing()) {
+                Settings settings = getSettings();
+                for (int i = 0; i < settings.langauges.Length; i++) {
+                    translations[i] = settings.langauges[i];
+                }
+            }
+            ImportWindow dialog = new ImportWindow(RelLanguage, (String translation, String filePath) => { importCB(settings, translation, filePath); }, translations);
+            dialog.ShowDialog();
         }
     }
 
@@ -1213,7 +1395,7 @@ namespace WpfApplication1 {
             this.isMapDescription = ms.isMapDescription;
         }
 
-        private static String escape(String input) {
+        public static String escape(String input) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < input.Length; i++) {
                 char c = input[i];

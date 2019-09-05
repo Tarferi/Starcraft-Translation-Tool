@@ -125,3 +125,18 @@ LblCreator=Made By:
 LblVersion=Version:
 LblProduct=Starcraft Map Translation Tool
 LblAutoUpdate=Allow automatic checking for updates
+
+BtnExportTranslation=Export Translation
+BtnImportTranslation=Import Translation
+
+WinExport=Export Translation
+BtnExport=Export
+ExcelFile=Microsoft Office Excel Spreadsheet
+ErrorExportFailed=Export Failed.
+LblExportFinish=Export Finished.
+BtnImport=Import
+LblConfirmOverWrite=Language {0} already exists. Overwrite?
+
+ErrorImportFailed=Import failed.
+ErrorInvalidImportData=Import failed. Invalid import data.
+LblImportFinished=Import finished.
