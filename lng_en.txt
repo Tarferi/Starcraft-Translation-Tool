@@ -1,0 +1,127 @@
+﻿WinTitle=Starcraft Map Translator
+WinControl=Control
+WinTranslation=Translation
+WinFilters=Filtres
+WinProcess=Process
+WinAddTranslation=Add Translation
+WinDeleteTranslation=Delete Translation
+WinConfirmDeletion=Confirm Deletion
+
+BtnBrowse=Browse
+BtnLoad=Load
+BtnUnload=Unload
+BtnSave=Save
+BtnClose=Close
+BtnAddTranslation=Add Translation
+BtnRemoveTranslation=Remove Translation
+BtnRun=Run
+BtnCheck=Check
+BtnOpen=Open
+BtnCreate=Create
+BtnDelete=Delete
+
+FilterShowMapDetails=Show Map Details
+FilterShowTriggerText=Show Trigger Text
+FilterShowTriggerComments=Show Trigger Comments
+FilterShowLocationNames=Show Location Names
+FilterShowSwitchNames=Show Switch Names
+FilterShowUnitNames=Show Unit Names
+
+LblLanguage=Language:
+LblLoadedSettings=Input Settings:
+LblLoadedMap=Loaded Map:
+LblOutputMap=Output Map:
+LblGuard=Guard
+LblGuardSwitch=Switch
+LblGuardDeaths=Deaths
+LblDefaultValues=Default Values:
+LblDefault=<Default>
+LblConfirmDeletion=Are you sure you want to delete language "{0}"?
+
+TableUsage=Usage
+TableOriginal=Original
+
+ErrMissingStrings={0} string(s) were not found in saved session!\r\nThose strings will have default values in translation tables.
+ErrMissingMapStrings={0} string(s) were not found in map!\r\nThose strings will be removed from session file, including all translations!
+ErrRemapNeeded={0} string(s) were misplaced!\r\nIndexes will be corrected.
+ErrConfirmTranslationUpdate=Press OK to confirm changes or Cancel to unload map.
+WinMapErr=Map Error
+ErrUnsupportedMap=Given map is not supported
+ErrNoOutputMap=Please specify output map.
+ErrMapFailedToLoad=Failed to load given map.
+
+WinLoadSettings=Settings Load
+LblNewSettingsCreate=Would you like to create a new file at given location?\n(This might overwrite the file, if it already exists)
+WinSaveSettings=Settings Save
+ErrFailedToCreateSettings=Failed to create settings file
+LblSettingsSaved=Settings Saved
+ErrFailedToCreateTranslation=Failed to create new translation.
+ErrFailedToCreateTranslationLanguageExists=Failed to create new translation. There is already such language.
+
+ErrTranslationFailed=Translation failed
+ErrInvalidTargetLanguage=Invalid target language selected
+LblTranslationDone=Translation completed
+ErrGuardCannotBeUsed=Given guard cannot be used
+LblGuardCanBeUsed=Given guard can be used
+
+# List pseudoheader
+LblUnitNames=Unit names:
+LblSwitchNames=Switch names:
+LblLocationNames=Location names:
+LblInvalidIndex=Invalid index: {0}
+
+LblTriggerTexts=Triggers:
+LblTriggerComments=Comments:
+LblBriefings=Briefings:
+LblBriefingComments=Briefing Comments:
+LblForceNames=Force Names:
+
+#List elements
+LblUnitName=Unit {0}
+LblSwitchName=Switch {0}
+LblTrigger=Trigger {0}
+LblLocation=Location {0}
+LblTriggerComment=Comment {0}
+LblBriefingTrigger=Briefing Trigger {0}
+LblForceName=Force {0}
+LblMapName=Map Name
+LblMapDescription=Map Description
+LblAnywhere=Anywhere
+LblPlayer=Player {0}
+
+WinOpenSettingsDialogTitle=Open Translation Settings File
+FormatName=Starcraft map translation file
+
+WinOpenMapDialogTitle=Open Starcraft Map File
+WinSaveMapDialogTitle=Save Starcraft Map File
+BwMapName=Starcraft Brood War Map
+ScMapName=Starcraft Map
+ScMapFile=Starcraft Map File
+
+
+menuMainMenu=_Main
+menuExit=_Exit
+menuLanguage=_Language
+menuEnglish=_English
+menuKorean=_Korean
+menuHelp=_Help
+menuForum=_Forum
+menuUpdate=_Update
+menuAbout=_About
+
+WinUpdateTitle=Update
+BtnUpdate=Update
+BtnRestart=Restart
+LblCurrentVersion=Current version:
+LblRemoteVersion=Latest version:
+LblUpdateProgress=Update progress:
+ErrorUpdateGetRemoteVersion=Failed to determine remote version.
+ErrorFailedToDownloadUpdate=Failed to download update.
+ErrorUpdateInvalidDownload=Failed to download remote version.
+ErrorFailedToRunUpdator=Failed to run updator
+
+WinAbout=About
+LblCreator=Made By:
+LblVersion=Version:
+LblProduct=Starcraft Map Translation Tool
+LblAutoUpdate=Allow automatic checking for updates
