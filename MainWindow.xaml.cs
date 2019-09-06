@@ -16,6 +16,7 @@ using System.Windows.Controls.Primitives;
 using OfficeOpenXml;
 using Microsoft.VisualBasic.CompilerServices;
 using System.IO;
+using OfficeOpenXml.Style;
 #if DEBUG_STR_REMAP
 using System.Diagnostics;
 #endif
@@ -1161,7 +1162,7 @@ namespace WpfApplication1 {
             try {
                 using (var package = new ExcelPackage()) {
                     // Add a new worksheet to the empty workbook
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Inventory");
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(translation);
 
                     Func<int, string> numToAlphaC = (int val) => { return "" + (char)(((byte)'A') + val); };
                     Func<int, string> numToAlphaT = null;
@@ -1170,11 +1171,35 @@ namespace WpfApplication1 {
 
                     Func<int, int, string> cell = (int x, int y) => numToAlpha(x) + y.ToString();
 
+                    Action<int, int, int, int> borderAround = (int left, int top, int right, int bottom) => {
+                        for (int i = left; i <= right; i++) { // Top and bottom borders
+                            worksheet.Cells[cell(i, top)].Style.Border.Top.Style = ExcelBorderStyle.Thick;
+                            worksheet.Cells[cell(i, bottom)].Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
+                        }
+                        for (int i = top; i <= bottom; i++) { // Left and right borders
+                            worksheet.Cells[cell(left, i)].Style.Border.Left.Style = ExcelBorderStyle.Thick;
+                            worksheet.Cells[cell(right, i)].Style.Border.Right.Style = ExcelBorderStyle.Thick;
+                        }
+                    };
+
                     //Add the headers
                     worksheet.Cells[cell(1, 1)].Value = "String ID";
                     worksheet.Cells[cell(2, 1)].Value = "Original String";
                     worksheet.Cells[cell(3, 1)].Value = "Usage";
                     worksheet.Cells[cell(4, 1)].Value = "Translated String";
+
+                    ExcelRange headerCells = worksheet.Cells[cell(1, 1) + ":" + cell(4, 1)];
+                    headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    headerCells.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                    headerCells.Style.Font.Bold = true;
+                    headerCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    borderAround(1, 1, 4, 1); // Header border
+                    borderAround(1, 1, 4, 1 + settings.ts.Length); // Entire table border
+                    borderAround(1, 1, 1, 1 + settings.ts.Length); // Column borders
+                    borderAround(2, 1, 2, 1 + settings.ts.Length); // Column borders
+                    borderAround(3, 1, 3, 1 + settings.ts.Length); // Column borders
+                    borderAround(4, 1, 4, 1 + settings.ts.Length); // Column borders
 
                     // Find language ID
                     int languageID = -1;
@@ -1194,14 +1219,44 @@ namespace WpfApplication1 {
                         worksheet.Cells[cell(2, 2 + i)].Value = str.OriginalContents;
                         worksheet.Cells[cell(3, 2 + i)].Value = str.description;
                         worksheet.Cells[cell(4, 2 + i)].Value = str.translations[languageID];
+
+                        worksheet.Cells[cell(1, 2 + i)].AutoFitColumns();
+                        worksheet.Cells[cell(2, 2 + i)].AutoFitColumns();
+                        worksheet.Cells[cell(3, 2 + i)].AutoFitColumns();
+                        worksheet.Cells[cell(4, 2 + i)].AutoFitColumns();
+
                     }
 
-                    worksheet.Name = translation;
+                    worksheet.Calculate();
+                    worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
+
+                    double w1 = worksheet.Column(1).Width;
+                    double w2 = worksheet.Column(2).Width;
+                    double w3 = worksheet.Column(3).Width;
+                    double w4 = worksheet.Column(4).Width;
+
+
+                    for (int i = 0; i < settings.originalStrings.Length; i++) {
+                        TranslateString str = settings.ts[i];
+
+                        worksheet.Cells[cell(1, 2 + i)].Style.WrapText = true;
+                        worksheet.Cells[cell(2, 2 + i)].Style.WrapText = true;
+                        worksheet.Cells[cell(3, 2 + i)].Style.WrapText = true;
+                        worksheet.Cells[cell(4, 2 + i)].Style.WrapText = true;
+
+                    }
+
+                    worksheet.Column(1).Width = w1;
+                    worksheet.Column(2).Width = w2;
+                    worksheet.Column(3).Width = w3;
+                    worksheet.Column(4).Width = w4;
+
 
                     // set some document properties
                     package.Workbook.Properties.Title = "Starcraft Map Translation File";
                     package.Workbook.Properties.Author = "Starcraft Map Translation Tool By Tarferi";
                     package.Workbook.Properties.Comments = "This file contains translation strings for a starcraft map";
+
 
                     System.IO.FileInfo xlFile = new System.IO.FileInfo(filePath);
 
