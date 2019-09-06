@@ -115,6 +115,14 @@ namespace WpfApplication1 {
                 brwsBtnSettings.IsEnabled = true;
                 txtSet.IsEnabled = true;
                 brwsBtnSaveSettings.Content = RelLanguage.BtnOpen;
+
+                checkComments.IsEnabled = true;
+                checkDisplayMessages.IsEnabled = true;
+                checkLocations.IsEnabled = true;
+                checkMapDetails.IsEnabled = true;
+                checkSwitches.IsEnabled = true;
+                checkUnitNames.IsEnabled = true;
+
                 clearTable();
             } else if (state == AppState.PICK_MAP) {
                 brwsBtnSaveSettings.Content = RelLanguage.BtnClose;
@@ -122,6 +130,13 @@ namespace WpfApplication1 {
                 brwsBtnInMap.IsEnabled = true;
                 txtInMap.IsEnabled = true;
                 btnOpenMap.IsEnabled = true;
+
+                checkComments.IsEnabled = true;
+                checkDisplayMessages.IsEnabled = true;
+                checkLocations.IsEnabled = true;
+                checkMapDetails.IsEnabled = true;
+                checkSwitches.IsEnabled = true;
+                checkUnitNames.IsEnabled = true;
 
                 clearTable();
             } else if (state == AppState.LOADING_MAP) {
@@ -571,124 +586,120 @@ namespace WpfApplication1 {
 
         private void setStrings(Settings settings) {
 
-            //IDisposable d = Dispatcher.DisableProcessing();
-            clearTable();
+            tblTrans.ItemsSource = null;
+            using (Dispatcher.DisableProcessing()) {
+                clearTable();
 
-            int width = (int) tblTrans.ActualWidth;
+                int width = (int)tblTrans.ActualWidth;
 
-            Style RightAlignStyle = new Style(typeof(DataGridCell)) {
-                Setters = {
+                Style RightAlignStyle = new Style(typeof(DataGridCell)) {
+                    Setters = {
                     new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right)
-                }   
-            };
-            Style RightAlignStyleH = new Style(typeof(DataGridColumnHeader)) {
-                Setters = {
+                }
+                };
+                Style RightAlignStyleH = new Style(typeof(DataGridColumnHeader)) {
+                    Setters = {
                     new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Right)
                 }
-            };
-            Style CenterAlignStyleH = new Style(typeof(DataGridColumnHeader)) {
-                Setters = {
+                };
+                Style CenterAlignStyleH = new Style(typeof(DataGridColumnHeader)) {
+                    Setters = {
                     new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Center)
                 }
-            };
+                };
 
-            {
-                DataGridNumericColumn c = new DataGridNumericColumn();
-                c.Header = "#";
-                c.Binding = new Binding("StringIndex");
-                c.Width = 60;
-                c.HeaderStyle = RightAlignStyleH;
-                c.IsReadOnly = true;
-                c.CellStyle = RightAlignStyle;
-                tblTrans.Columns.Add(c);
+                {
+                    DataGridNumericColumn c = new DataGridNumericColumn();
+                    c.Header = "#";
+                    c.Binding = new Binding("StringIndex");
+                    c.Width = 60;
+                    c.HeaderStyle = RightAlignStyleH;
+                    c.IsReadOnly = true;
+                    c.CellStyle = RightAlignStyle;
+                    tblTrans.Columns.Add(c);
+                }
+
+                {
+                    DataGridTextColumn c = new DataGridTextColumn();
+                    c.Header = RelLanguage.TableUsage;
+                    c.Binding = new Binding("description");
+
+                    c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
+                    c.IsReadOnly = true;
+                    c.HeaderStyle = CenterAlignStyleH;
+
+                    Style textStyle = new Style(typeof(TextBlock));
+                    textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
+                    c.ElementStyle = textStyle;
+                    Style textEditStyle = new Style(typeof(TextBox));
+                    textEditStyle.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
+                    c.EditingElementStyle = textEditStyle;
+
+                    tblTrans.Columns.Add(c);
+                }
+
+                {
+                    DataGridTextColumn c = new DataGridTextColumn();
+                    c.Header = RelLanguage.TableOriginal;
+                    c.Binding = new Binding("OriginalContents");
+
+                    c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
+                    c.IsReadOnly = true;
+                    c.HeaderStyle = CenterAlignStyleH;
+
+                    Style textStyle = new Style(typeof(TextBlock));
+                    textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
+                    c.ElementStyle = textStyle;
+                    Style textEditStyle = new Style(typeof(TextBox));
+                    textEditStyle.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
+                    c.EditingElementStyle = textEditStyle;
+
+                    tblTrans.Columns.Add(c);
+                }
+
+                for (int i = 0; i < settings.langauges.Length; i++) {
+                    DataGridTextColumn c = new DataGridTextColumn();
+                    c.Header = settings.langauges[i];
+                    c.Binding = new Binding("translations[" + i + "]");
+                    c.IsReadOnly = false;
+                    ((Binding)c.Binding).Mode = BindingMode.TwoWay;
+                    c.HeaderStyle = CenterAlignStyleH;
+
+                    c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
+
+                    Style textStyle = new Style(typeof(TextBlock));
+                    textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
+                    c.ElementStyle = textStyle;
+                    Style textEditStyle = new Style(typeof(TextBox));
+                    textEditStyle.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
+                    c.EditingElementStyle = textEditStyle;
+
+                    tblTrans.Columns.Add(c);
+
+                }
+
+                for (int i = 0; i < settings.ts.Length; i++) {
+                    TranslateString ms = settings.ts[i];
+                    Values.Add(ms);
+                }
+
+                if (settings.useCondition < 256) { // Switch
+                    rdSwitches.IsChecked = true;
+                    rdDeaths.IsChecked = false;
+                    cmbSwitches.SelectedIndex = settings.useCondition;
+                } else { // Deaths
+                    rdDeaths.IsChecked = true;
+                    rdSwitches.IsChecked = false;
+                    int playerID = (settings.useCondition & 0xffff) >> 8;
+                    int unitID = (settings.useCondition >> 16) & 0xff;
+                    cmbDeathsP.SelectedIndex = playerID;
+                    cmbDeathsU.SelectedIndex = unitID;
+                }
+
+                //d.Dispose();
+                applyFilters();
+                fireTableUpdate();
             }
-
-            {
-                DataGridTextColumn c = new DataGridTextColumn();
-                c.Header = RelLanguage.TableUsage;
-                c.Binding = new Binding("description");
-
-                c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
-                c.IsReadOnly = true;
-                c.HeaderStyle = CenterAlignStyleH;
-
-                Style textStyle = new Style(typeof(TextBlock));
-                textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-                c.ElementStyle = textStyle;
-                Style textEditStyle = new Style(typeof(TextBox));
-                textEditStyle.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
-                c.EditingElementStyle = textEditStyle;
-                
-                tblTrans.Columns.Add(c);
-            }
-
-            {
-                DataGridTextColumn c = new DataGridTextColumn();
-                c.Header = RelLanguage.TableOriginal;
-                c.Binding = new Binding("OriginalContents");
-
-                c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
-                c.IsReadOnly = true;
-                c.HeaderStyle = CenterAlignStyleH;
-
-                Style textStyle = new Style(typeof(TextBlock));
-                textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-                c.ElementStyle = textStyle;
-                Style textEditStyle = new Style(typeof(TextBox));
-                textEditStyle.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
-                c.EditingElementStyle = textEditStyle;
-
-                tblTrans.Columns.Add(c);
-            }
-
-            for (int i = 0; i < settings.langauges.Length; i++) {
-                DataGridTextColumn c = new DataGridTextColumn();
-                c.Header = settings.langauges[i];
-                c.Binding = new Binding("translations[" + i + "]");
-                c.IsReadOnly = false;
-                ((Binding) c.Binding).Mode = BindingMode.TwoWay;
-                c.HeaderStyle = CenterAlignStyleH;
-
-                c.Width = new DataGridLength(1.0, DataGridLengthUnitType.Star);
-
-                Style textStyle = new Style(typeof(TextBlock));
-                textStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-                c.ElementStyle = textStyle;
-                Style textEditStyle = new Style(typeof(TextBox));
-                textEditStyle.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
-                c.EditingElementStyle = textEditStyle;
-
-                tblTrans.Columns.Add(c);
-                
-            }
-
-            tblTrans.ItemsSource = null;
-
-            for (int i = 0; i < settings.ts.Length; i++) {
-                TranslateString ms = settings.ts[i];
-                Values.Add(ms);
-            }
-
-            tblTrans.ItemsSource = Values;
-
-            if (settings.useCondition < 256) { // Switch
-                rdSwitches.IsChecked = true;
-                rdDeaths.IsChecked = false;
-                cmbSwitches.SelectedIndex = settings.useCondition;
-            } else { // Deaths
-                rdDeaths.IsChecked = true;
-                rdSwitches.IsChecked = false;
-                int playerID = (settings.useCondition & 0xffff) >> 8;
-                int unitID = (settings.useCondition >> 16) & 0xff;
-                cmbDeathsP.SelectedIndex = playerID;
-                cmbDeathsU.SelectedIndex = unitID;
-            }
-
-
-            //d.Dispose();
-
-            applyFilters();
-            fireTableUpdate();
         }
 
         private void applyFilters() {
@@ -905,9 +916,9 @@ namespace WpfApplication1 {
             
             if (state == AppState.READY) { // Save
                 Settings set = getSettings(); // Scrap settings from UI
-                using (Dispatcher.DisableProcessing()) {
+                //using (Dispatcher.DisableProcessing()) {
                     set.saveToFile(set.settingsPath);
-                }
+                //}
                 setSettings(set);
                 MessageBox.Show(RelLanguage.LblSettingsSaved, RelLanguage.WinSaveSettings, MessageBoxButton.OK, MessageBoxImage.Information);
             } else {
@@ -920,12 +931,12 @@ namespace WpfApplication1 {
         }
 
         private void brwsBtnInMap_Click(object sender, RoutedEventArgs e) {
-            using (Dispatcher.DisableProcessing()) {
+            //using (Dispatcher.DisableProcessing()) {
                 String f = getMapFile();
                 if (f != null) {
                     setComboText(txtInMap, f);
                 }
-            }
+            //}
             btnOpenMap_Click(sender, null);
         }
 
@@ -1031,14 +1042,13 @@ namespace WpfApplication1 {
         }
 
         private void button1_Click(object sender, RoutedEventArgs e) {
+            Settings settings = getSettings();
             String[] translations = new String[settings.langauges.Length];
-            using (Dispatcher.DisableProcessing()) {
-                Settings settings = getSettings();
-                
+            //using (Dispatcher.DisableProcessing()) {
                 for (int i = 0; i < settings.langauges.Length; i++) {
                     translations[i] = settings.langauges[i];
                 }
-            }
+            //}
             AddTranslationDialog dialog = new AddTranslationDialog(RelLanguage, translations, createNewLangaugeCB);
             dialog.ShowDialog();
             
@@ -1081,13 +1091,13 @@ namespace WpfApplication1 {
         }
 
         private void btnDeleteTranslation_Click(object sender, RoutedEventArgs e) {
+            Settings settings = getSettings();
             String[] translations = new String[settings.langauges.Length];
-            using (Dispatcher.DisableProcessing()) {
-                Settings settings = getSettings();
+            //using (Dispatcher.DisableProcessing()) {
                 for (int i = 0; i < settings.langauges.Length; i++) {
                     translations[i] = settings.langauges[i];
                 }
-            }
+            //}
             DeleteTranslationDialog dialog = new DeleteTranslationDialog(RelLanguage, translations, deleteLangaugeCB);
             dialog.ShowDialog();
         }
@@ -1270,13 +1280,13 @@ namespace WpfApplication1 {
         }
  
         private void btnExportTranslation_Click(object sender, RoutedEventArgs e) {
+            Settings settings = getSettings();
             String[] translations = new String[settings.langauges.Length];
-            using (Dispatcher.DisableProcessing()) {
-                Settings settings = getSettings();
+            //using (Dispatcher.DisableProcessing()) {
                 for (int i = 0; i < settings.langauges.Length; i++) {
                     translations[i] = settings.langauges[i];
                 }
-            }
+            //}
             ExportWindow dialog = new ExportWindow(RelLanguage, translations, (String translation, String filePath) => { exportCB(settings, translation, filePath); });
             dialog.ShowDialog();
         }
@@ -1355,15 +1365,17 @@ namespace WpfApplication1 {
         }
 
         private void btnImportTranslation_Click(object sender, RoutedEventArgs e) {
+            Settings settings = getSettings();
             String[] translations = new String[settings.langauges.Length];
-            using (Dispatcher.DisableProcessing()) {
-                Settings settings = getSettings();
+            //using (Dispatcher.DisableProcessing()) {
                 for (int i = 0; i < settings.langauges.Length; i++) {
                     translations[i] = settings.langauges[i];
                 }
-            }
+            //}
             ImportWindow dialog = new ImportWindow(RelLanguage, (String translation, String filePath) => { importCB(settings, translation, filePath); }, translations);
-            dialog.ShowDialog();
+            if (dialog.isGood) {
+                dialog.ShowDialog();
+            }
         }
     }
 

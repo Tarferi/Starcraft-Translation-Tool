@@ -33,24 +33,28 @@ namespace TranslatorUI {
             return "";
         }
 
+        public bool isGood { get { return filePath != null; } }
+
         public ImportWindow(RelLanguage RelLanguage, Action<String, String> callback, String[] languages) {
             this.RelLanguage = RelLanguage;
             InitializeComponent();
             this.DataContext = this;
             this.callback = callback;
             this.languages = languages;
-            String filePath = WpfApplication1.MainWindow.getFile(RelLanguage.WinImport, new String[] { "xlsx" }, new String[] { RelLanguage.ExcelFile });
+            filePath = WpfApplication1.MainWindow.getFile(RelLanguage.WinImport, new String[] { "xlsx" }, new String[] { RelLanguage.ExcelFile });
             if(filePath == null) {
                 this.Close();
+                return;
             }
             if(filePath == "") {
                 this.Close();
+                return;
             }
             if (!System.IO.File.Exists(filePath)) {
                 this.Close();
+                return;
             }
             txtLng.Text = tryLoadingSheetName(filePath);
-            this.filePath = filePath;
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e) {
