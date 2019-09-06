@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace WpfApplication1 {
+
     class OutOfBoundsReadException : Exception {
 
     }
@@ -11,8 +13,10 @@ namespace WpfApplication1 {
 
         private MemoryStream me;
 
+        private int DataLeft { get { return (int)(me.Length - me.Position); } }
+
         public int readByte() {
-            if(me.Length - me.Position == 0) {
+            if(DataLeft == 0) {
                 throw new OutOfBoundsReadException();
             }
             return me.ReadByte();
@@ -35,25 +39,42 @@ namespace WpfApplication1 {
         }
 
         public String[][] readStringArrayArray() {
+            List<String[]> lst = new List<String[]>();
             int length = readInt();
+            for (int i = 0; i < length; i++) {
+                lst.Add(readStringArray());
+                if(DataLeft == 0) {
+                    length = i + 1;
+                }
+            }
             String[][] strs = new String[length][];
             for (int i = 0; i < length; i++) {
-                strs[i] = readStringArray();
+                strs[i] = lst[i];
             }
             return strs;
         }
 
         public String[] readStringArray() {
+            List<String> lst = new List<String>();
             int length = readInt();
+            for (int i = 0; i < length; i++) {
+                lst.Add(readString());
+                if (DataLeft == 0) {
+                    length = i + 1;
+                }
+            }
             String[] strs = new String[length];
             for (int i = 0; i < length; i++) {
-                strs[i] = readString();
+                strs[i] = lst[i];
             }
             return strs;
         }
 
         public String readString() {
             int length = readInt();
+            if (length > DataLeft) {
+                length = DataLeft;
+            }
             byte[] bytes = new byte[length];
             for (int i = 0; i < length; i++) {
                 bytes[i] = (byte)readByte();
