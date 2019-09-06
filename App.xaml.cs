@@ -1,6 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Threading;
 using TranslatorUI;
+
+
 
 namespace WpfApplication1 {
     
@@ -8,6 +13,9 @@ namespace WpfApplication1 {
 
         public App() : base() {
             this.DispatcherUnhandledException += aApp_DispatcherUnhandledException;
+#if !DEBUG
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ResolveResources);
+#endif
         }
 
         private static RelLanguage RelLanguage { get { return WpfApplication1.MainWindow.GetLanguage(); } }
@@ -18,5 +26,16 @@ namespace WpfApplication1 {
             errDialog.ShowDialog();
             Shutdown();
         }
+        
+#if !DEBUG
+        Assembly ResolveResources(object sender, ResolveEventArgs args) {
+            string dllName = args.Name.Contains(',') ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name.Replace(".dll", "");
+            if (dllName == "EPPlus") {
+                return Assembly.Load(TranslatorUI.Properties.Resources.EPPlus);
+            } else {
+                return null;
+            }
+        }
+#endif
     }
 }

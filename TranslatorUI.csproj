@@ -171,9 +171,11 @@
   <ItemGroup>
     <EmbeddedResource Include="lng_ko.txt" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\TranslateLib.dll" />
+    <EmbeddedResource Include="Resources\EPPlus.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\TranslateLib.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

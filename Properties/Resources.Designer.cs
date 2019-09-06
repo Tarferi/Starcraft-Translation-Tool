@@ -63,6 +63,16 @@ namespace TranslatorUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] EPPlus {
+            get {
+                object obj = ResourceManager.GetObject("EPPlus", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] TranslateLib {
             get {
                 object obj = ResourceManager.GetObject("TranslateLib", resourceCulture);
