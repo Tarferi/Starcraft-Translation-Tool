@@ -140,3 +140,9 @@ LblConfirmOverWrite=Language {0} already exists. Overwrite?
 ErrorImportFailed=Import failed.
 ErrorInvalidImportData=Import failed. Invalid import data.
 LblImportFinished=Import finished.
+
+WinError=Crash Handler
+LblErrorUncaughtException=Uncaught exception:
+LblErrorCrash=Application cannot continue.
+BtnExit=Exit
+LblErrorCallstackDetails=Details:

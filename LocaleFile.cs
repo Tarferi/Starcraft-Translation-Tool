@@ -202,6 +202,12 @@ namespace TranslatorUI {
         public String LblImportFinished { get { return __internal("LblImportFinished"); } }
         public String ErrorInvalidImportData { get { return __internal("ErrorInvalidImportData"); } }
 
+        public String WinError { get { return __internal("WinError"); } }
+        public String LblErrorUncaughtException { get { return __internal("LblErrorUncaughtException"); } }
+        public String LblErrorCrash { get { return __internal("LblErrorCrash"); } }
+        public String BtnExit { get { return __internal("BtnExit"); } }
+        public String LblErrorCallstackDetails { get { return __internal("LblErrorCallstackDetails"); } }
+
 
     }
 

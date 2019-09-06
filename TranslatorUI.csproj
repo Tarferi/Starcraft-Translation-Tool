@@ -68,6 +68,9 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationErrorWindow.xaml.cs">
+      <DependentUpon>ApplicationErrorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AsyncWorker.cs" />
     <Compile Include="DeleteTranslationDialog.xaml.cs">
       <DependentUpon>DeleteTranslationDialog.xaml</DependentUpon>
@@ -93,6 +96,10 @@
     </Compile>
     <Compile Include="WriteBuffer.cs" />
     <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ApplicationErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

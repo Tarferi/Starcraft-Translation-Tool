@@ -31,12 +31,16 @@ namespace WpfApplication1 {
         PROCESSING
     }
 
-
     public partial class MainWindow : Window {
 
         public static readonly string Version = Assembly.GetEntryAssembly().GetName().Version.Major.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Minor.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Build.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Revision.ToString() + " BETA";
 
-        public RelLanguage RelLanguage { get; set; }
+        private static RelLanguage __lng;
+
+        public static RelLanguage GetLanguage() {
+            return __lng;
+        }
+        public RelLanguage RelLanguage { get { return __lng; } set { __lng = value; } }
         public bool isEnglish { get { return RelLanguage.languageName == "en"; } set { } }
         public bool isKorean { get { return RelLanguage.languageName == "ko"; } set { } }
 
