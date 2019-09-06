@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace WpfApplication1 {
@@ -9,9 +8,30 @@ namespace WpfApplication1 {
 
     }
 
+    class SimpleMemoryStream {
+
+        private byte[] data;
+        private int position = 0;
+
+        public SimpleMemoryStream(byte[] data) {
+            this.data = data;
+        }
+
+        public int Length { get { return data.Length; } }
+        public int Position { get { return position; } }
+
+        public byte ReadByte() {
+            if (position == data.Length) {
+                throw new OutOfBoundsReadException();
+            }
+            position++;
+            return data[position - 1];
+        }
+    }
+
     class ReadBuffer {
 
-        private MemoryStream me;
+        private SimpleMemoryStream me;
 
         private int DataLeft { get { return (int)(me.Length - me.Position); } }
 
@@ -83,12 +103,8 @@ namespace WpfApplication1 {
             return str;
         }
 
-        public ReadBuffer(MemoryStream me) {
-            this.me = me;
-        }
-
         public ReadBuffer(byte[] data) {
-            this.me = new MemoryStream(data);
+            this.me = new SimpleMemoryStream(data);
         }
 
         public ReadBuffer(char[] data) {
@@ -96,7 +112,7 @@ namespace WpfApplication1 {
             for(int i = 0; i < data.Length; i++) {
                 bData[i] = (byte) data[i];
             }
-            this.me = new MemoryStream(bData);
+            this.me = new SimpleMemoryStream(bData);
         }
 
         public byte[] readByteArray(int length) {
