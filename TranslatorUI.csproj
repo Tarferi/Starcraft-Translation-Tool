@@ -172,7 +172,7 @@
     <EmbeddedResource Include="lng_ko.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\EPPlus.dll" />
+    <None Include="Resources\EPPlus.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\TranslateLib.dll" />

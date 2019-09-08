@@ -1353,7 +1353,7 @@ namespace WpfApplication1 {
 
                     for(int i = 0; i < settings.originalStrings.Length; i++) {
                         String item = (String) worksheet.Cells[cell(4, 2 + i)].Value;
-                        newStrings[languageID][i] = item.Replace("\r", "").Replace("\n", "\r\n");
+                        newStrings[languageID][i] = TranslateString.unescape(item.Replace("\r", "").Replace("\n", "\r\n"));
                     }
 
                     settings.langauges = newLanguages;
