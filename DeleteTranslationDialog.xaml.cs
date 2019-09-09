@@ -5,10 +5,9 @@ namespace TranslatorUI {
 
     public partial class DeleteTranslationDialog : Window {
 
-        public RelLanguage RelLanguage { get; set; }
+        public dynamic RelLanguage { get { return WpfApplication1.MainWindow.GetLanguage(); } }
 
-        public DeleteTranslationDialog(RelLanguage RelLanguage, String[] existingTranslations, Action<String> callback) {
-            this.RelLanguage = RelLanguage;
+        public DeleteTranslationDialog(String[] existingTranslations, Action<String> callback) {
             InitializeComponent();
             cmbDefs.Items.Clear();
             foreach (String str in existingTranslations) {

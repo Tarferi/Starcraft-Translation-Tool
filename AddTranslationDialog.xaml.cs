@@ -5,10 +5,9 @@ namespace TranslatorUI {
 
     public partial class AddTranslationDialog : Window {
 
-        public RelLanguage RelLanguage { get; set; }
+        public dynamic RelLanguage { get { return WpfApplication1.MainWindow.GetLanguage(); } }
 
-        public AddTranslationDialog(RelLanguage RelLanguage, String[] existingTranslations, Action<String, String> callback) {
-            this.RelLanguage = RelLanguage;
+        public AddTranslationDialog(String[] existingTranslations, Action<String, String> callback) {
             InitializeComponent();
             cmbDefs.Items.Clear();
             cmbDefs.Items.Add(RelLanguage.LblDefault);

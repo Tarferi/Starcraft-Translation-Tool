@@ -5,9 +5,9 @@ namespace TranslatorUI {
 
     public partial class ApplicationErrorWindow : Window {
 
-        RelLanguage RelLanguage { get; set; }
+        dynamic RelLanguage { get; set; }
 
-        public ApplicationErrorWindow(RelLanguage RelLanguage, Exception exception) {
+        public ApplicationErrorWindow(dynamic RelLanguage, Exception exception) {
             this.RelLanguage = RelLanguage;
             InitializeComponent();
             this.DataContext = this;

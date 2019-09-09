@@ -88,6 +88,7 @@
     <Compile Include="LocaleFile.cs" />
     <Compile Include="ReadBuffer.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="StarcraftColors.cs" />
     <Compile Include="TheLib.cs" />
     <Compile Include="UnsafeReadBuffer.cs" />
     <Compile Include="UnsafeWriteBuffer.cs" />
@@ -176,6 +177,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\TranslateLib.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="colors.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -12,7 +12,7 @@ namespace TranslatorUI {
 
     public partial class UpdateWindow : Window {
 
-        public RelLanguage RelLanguage { get; set; }
+        public dynamic RelLanguage { get; set; }
 
         private static AsyncWorker aw = new AsyncWorker();
 

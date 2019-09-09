@@ -8,16 +8,29 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         
-        Title="{Binding RelLanguage.WinExport, Mode=OneWay, FallbackValue=[ExportWindow]}" Height="81.911" Width="300">
+        Title="{Binding RelLanguage.WinExport, Mode=OneWay, FallbackValue=[ExportWindow]}" Height="98.911" Width="300">
     <Grid Margin="0,0,2,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <TextBlock x:Name="label" Text="{Binding RelLanguage.LblLanguage, Mode=OneWay, FallbackValue=[Language]}" HorizontalAlignment="Right" Margin="5,15,0,0" VerticalAlignment="Top" Height="19"/>
         <ComboBox x:Name="cmbDefs" Margin="5,14,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button x:Name="btnOk" Content="{Binding RelLanguage.BtnExport, Mode=OneWay, FallbackValue=[Export]}" Margin="5,14,5,0" Height="22" Grid.Column="2" Click="btnOk_Click" VerticalAlignment="Top"/>
+        <Button MinWidth="70" x:Name="btnOk" Content="{Binding RelLanguage.BtnExport, Mode=OneWay, FallbackValue=[Export]}" Margin="5,14,5,0" Height="22" Grid.Column="2" Click="btnOk_Click" VerticalAlignment="Top"/>
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="checkEscapeColors" Content="{Binding RelLanguage.LblEscapeColors, Mode=OneWay, FallbackValue=[EscapeColors]}" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Grid.Row="1" VerticalAlignment="Top"/>
+            <CheckBox x:Name="checkEscapeNewLines" Content="{Binding RelLanguage.LblEscapeNewlines, Mode=OneWay, FallbackValue=[EscapeNewlines]}" Grid.Column="2" HorizontalAlignment="Left" Margin="5,0,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+        </Grid>
 
     </Grid>
 </Window>

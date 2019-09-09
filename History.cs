@@ -10,18 +10,23 @@ namespace QChkUI {
         public bool autoUpdate = true;
         public long lastCheckForUpdate = 0;
         public String secretKey = "";
-
+        public bool exportColorCodes = true;
+        public bool exportEscapedLineBreaks = false;
         
         public void read(ReadBuffer rb) {
             autoUpdate = rb.readBool();
             lastCheckForUpdate = rb.readLong();
             secretKey = rb.readString();
+            exportColorCodes = rb.readBool();
+            exportEscapedLineBreaks = rb.readBool();
         }
 
         public void write(WriteBuffer wb) {
             wb.writeBool(autoUpdate);
             wb.writeLong(lastCheckForUpdate);
             wb.writeString(secretKey);
+            wb.writeBool(exportColorCodes);
+            wb.writeBool(exportEscapedLineBreaks);
         }
 
         public void push() {

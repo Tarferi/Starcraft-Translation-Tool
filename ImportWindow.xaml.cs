@@ -1,25 +1,14 @@
 ﻿using OfficeOpenXml;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TranslatorUI {
 
 
     public partial class ImportWindow : Window {
 
-        public RelLanguage RelLanguage { get; set; }
+        public dynamic RelLanguage { get { return WpfApplication1.MainWindow.GetLanguage(); } }
 
         private String tryLoadingSheetName(String filePath) {
             try {
@@ -35,8 +24,7 @@ namespace TranslatorUI {
 
         public bool isGood { get { return filePath != null; } }
 
-        public ImportWindow(RelLanguage RelLanguage, Action<String, String> callback, String[] languages) {
-            this.RelLanguage = RelLanguage;
+        public ImportWindow(Action<String, String> callback, String[] languages) {
             InitializeComponent();
             this.DataContext = this;
             this.callback = callback;
@@ -66,9 +54,9 @@ namespace TranslatorUI {
                             return;
                         }
                     }
-                    callback(txtLng.Text, filePath);
-                    this.Close();
                 }
+                callback(txtLng.Text, filePath);
+                this.Close();
             }
         }
 

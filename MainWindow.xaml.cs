@@ -17,6 +17,8 @@ using OfficeOpenXml;
 using Microsoft.VisualBasic.CompilerServices;
 using System.IO;
 using OfficeOpenXml.Style;
+using System.Drawing;
+using static TranslatorUI.StarcraftColors;
 #if DEBUG_STR_REMAP
 using System.Diagnostics;
 #endif
@@ -35,12 +37,14 @@ namespace WpfApplication1 {
 
         public static readonly string Version = Assembly.GetEntryAssembly().GetName().Version.Major.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Minor.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Build.ToString() + "." + Assembly.GetEntryAssembly().GetName().Version.Revision.ToString() + " BETA";
 
-        private static RelLanguage __lng;
+        private static dynamic __lng;
+        private StarcraftColors colors;
 
-        public static RelLanguage GetLanguage() {
+        public static dynamic GetLanguage() {
             return __lng;
         }
-        public RelLanguage RelLanguage { get { return __lng; } set { __lng = value; } }
+
+        public dynamic RelLanguage { get { return __lng; } set { __lng = value; } }
         public bool isEnglish { get { return RelLanguage.languageName == "en"; } set { } }
         public bool isKorean { get { return RelLanguage.languageName == "ko"; } set { } }
 
@@ -65,6 +69,11 @@ namespace WpfApplication1 {
             support = SupportType.Unsupported;
             initCombos();
             UpdateWindow.checkForAutoUpdatesOnBackground(this);
+
+            colors = StarcraftColors.load();
+            if (colors == null) {
+                showErrorMessageBox(RelLanguage.ResColorErrTitle, RelLanguage.ResColorErr);
+            }
         }
 
         public void asyncFoundUpdate() {
@@ -72,7 +81,7 @@ namespace WpfApplication1 {
         }
 
         private void setLanguage(String lng) {
-            RelLanguage = RelLanguage.fromResource(lng, lng);
+            RelLanguage = TranslatorUI.RelLanguage.fromResource(lng, lng);
             this.DataContext = null;
             this.DataContext = this;
         }
@@ -1053,7 +1062,7 @@ namespace WpfApplication1 {
                     translations[i] = settings.langauges[i];
                 }
             //}
-            AddTranslationDialog dialog = new AddTranslationDialog(RelLanguage, translations, createNewLangaugeCB);
+            AddTranslationDialog dialog = new AddTranslationDialog(translations, createNewLangaugeCB);
             dialog.ShowDialog();
             
         }
@@ -1102,7 +1111,7 @@ namespace WpfApplication1 {
                     translations[i] = settings.langauges[i];
                 }
             //}
-            DeleteTranslationDialog dialog = new DeleteTranslationDialog(RelLanguage, translations, deleteLangaugeCB);
+            DeleteTranslationDialog dialog = new DeleteTranslationDialog(translations, deleteLangaugeCB);
             dialog.ShowDialog();
         }
 
@@ -1172,7 +1181,25 @@ namespace WpfApplication1 {
             setLanguage("ko");
         }
 
-        private void exportCB(Settings settings, String translation, String filePath) {
+        enum StringOrigin {
+            Title,
+            Game,
+            Briefing,
+            Unused
+        }
+
+        private Func<TranslateString, StringOrigin> originResolver = (TranslateString str) => {
+            if (str.briefingActionIndexes.Length > 0) {
+                return StringOrigin.Briefing;
+            } else if (str.triggerActionIndexes.Length > 0 || str.unitIndexs.Length > 0) {
+                return StringOrigin.Game;
+            } else if (str.isMapName) {
+                return StringOrigin.Title;
+            }
+            return StringOrigin.Unused;
+        };
+
+        private void exportCB(Settings settings, String translation, String filePath, bool escapeColors, bool escapeNewline) {
             try {
                 using (var package = new ExcelPackage()) {
                     // Add a new worksheet to the empty workbook
@@ -1226,14 +1253,92 @@ namespace WpfApplication1 {
                         showErrorMessageBox(RelLanguage.WinExport, RelLanguage.ErrorExportFailed);
                     }
 
+
+                    Func<int, StringOrigin, Color?> colorMapping = (int code, StringOrigin origin) => {
+                        if (origin == StringOrigin.Title) {
+                            if (code < colors.TitleColors.Length) {
+                                StarcraftColor color = colors.TitleColors[code];
+                                if (color.Valid) {
+                                    return color.Color;
+                                }
+                            }
+                            return null;
+                        } else if (origin == StringOrigin.Briefing) {
+                            if (code < colors.BriefingColors.Length) {
+                                StarcraftColor color = colors.BriefingColors[code];
+                                if (color.Valid) {
+                                    return color.Color;
+                                }
+                            }
+                            return null;
+                        } else if (origin == StringOrigin.Game) {
+                            if (code < colors.GameColors.Length) {
+                                StarcraftColor color = colors.GameColors[code];
+                                if (color.Valid) {
+                                    return color.Color;
+                                }
+                            }
+                            return null;
+                        } else if(origin == StringOrigin.Unused) {
+                            return null;
+                        }
+                        return null;
+                    };
+
+                    Action<ExcelRange, StringOrigin, String> colorizer = (ExcelRange cells, StringOrigin origin, String str) => {
+                        String unescaped = TranslateString.unescape(str);
+                        StringBuilder continuous = new StringBuilder();
+                        Color currentColor = Color.Black;
+                        cells.IsRichText = true;
+                        for (int i = 0; i < unescaped.Length; i++) {
+                            char c = unescaped[i];
+                            Color? clr = colorMapping(c, origin);
+                            if (clr != null) {
+                                if (continuous.Length > 0) {
+                                    ExcelRichText txt = cells.RichText.Add(continuous.ToString());
+                                    txt.Color = currentColor;
+                                    continuous.Clear();
+                                }
+                                currentColor = clr.Value;
+                            } else {
+                                if (c == '\r') {
+                                } else if(c == '\n') {
+                                    if (escapeNewline) {
+                                        continuous.Append("<13>");
+                                    } else {
+                                        continuous.Append(c);
+                                    }
+                                } else if (Char.IsControl(c)) {
+                                    continuous.Append(TranslateString.escape(c.ToString()));
+                                } else { 
+                                    continuous.Append(c);
+                                }
+                            }
+                        }
+                        if (continuous.Length > 0) {
+                            ExcelRichText txt = cells.RichText.Add(continuous.ToString());
+                            txt.Color = currentColor;
+                            continuous.Clear();
+                        }
+                    };
+
+                    Action<ExcelRange, StringOrigin, String> notColorizer = (ExcelRange cells, StringOrigin o, String str) => {
+                        cells.Value = str;
+                    };
+
+                    Action<ExcelRange, StringOrigin, String> cellSetter = escapeColors ? colorizer : notColorizer;
+
                     for (int i = 0; i < settings.originalStrings.Length; i++) {
                         TranslateString str = settings.ts[i];
 
-                        worksheet.Cells[cell(1, 2 + i)].Value = str.StringIndex.ToString();
-                        worksheet.Cells[cell(2, 2 + i)].Value = str.OriginalContents;
-                        worksheet.Cells[cell(3, 2 + i)].Value = str.description;
-                        worksheet.Cells[cell(4, 2 + i)].Value = str.translations[languageID];
+                        StringOrigin origin = originResolver(str);
 
+                        notColorizer(worksheet.Cells[cell(1, 2 + i)], origin, str.StringIndex.ToString());
+                        notColorizer(worksheet.Cells[cell(2, 2 + i)], origin, str.OriginalContents);
+                        notColorizer(worksheet.Cells[cell(3, 2 + i)], origin, str.description);
+                        cellSetter(worksheet.Cells[cell(4, 2 + i)], origin, str.translations[languageID]);
+
+                  
                         worksheet.Cells[cell(1, 2 + i)].AutoFitColumns();
                         worksheet.Cells[cell(2, 2 + i)].AutoFitColumns();
                         worksheet.Cells[cell(3, 2 + i)].AutoFitColumns();
@@ -1291,7 +1396,7 @@ namespace WpfApplication1 {
                     translations[i] = settings.langauges[i];
                 }
             //}
-            ExportWindow dialog = new ExportWindow(RelLanguage, translations, (String translation, String filePath) => { exportCB(settings, translation, filePath); });
+            ExportWindow dialog = new ExportWindow(translations, (String translation, String filePath, bool escapeColors, bool escapeNewline) => { exportCB(settings, translation, filePath, escapeColors, escapeNewline); });
             dialog.ShowDialog();
         }
 
@@ -1301,6 +1406,49 @@ namespace WpfApplication1 {
                 using (ExcelPackage package = new ExcelPackage(existingFile)) {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
 
+                    List<String> errors = new List<String>();
+
+                    Func<Color, StringOrigin, StarcraftColor> colorMapping = (Color color, StringOrigin origin) => {
+                        if (origin == StringOrigin.Title) {
+                            return colors.getTitleColor(color);
+                        } else if (origin == StringOrigin.Briefing) {
+                            return colors.getBriefingColor(color);
+                        } else if (origin == StringOrigin.Game) {
+                            return colors.getGameColor(color);
+                        } else if (origin == StringOrigin.Unused) {
+                            return colors.DefaultColor;
+                        }
+                        errors.Add("Invalid origin: " + origin);
+                        return null;
+                    };
+
+                    Func<ExcelRichTextCollection, StringOrigin, String> uncolorizer = (ExcelRichTextCollection texts, StringOrigin origin) => {
+                        StringBuilder sb = new StringBuilder();
+                        foreach(ExcelRichText text in texts) {
+                            StarcraftColor c = colorMapping(text.Color, origin);
+                            if (c == null) { // Invalid color
+                                errors.Add("Invalid color: #" + (text.Color.ToArgb() & 0xffffff).ToString("X6"));
+                            } else {
+                                if (c.Valid) { // Not default background
+                                    sb.Append((char)c.key);
+                                }
+                            }
+                            sb.Append(text.Text.Replace("\r", "").Replace("\n", "\r\n"));
+                        }
+                        return sb.ToString();
+                    };
+
+                    Func<ExcelRange, StringOrigin, String> unescaper = (ExcelRange cells, StringOrigin origin) => {
+                        StringBuilder result = new StringBuilder();
+                        if (cells.IsRichText) {
+                            String str = uncolorizer(cells.RichText, origin);
+                            result.Append(TranslateString.escape(str));
+                        } else {
+                            result.Append(TranslateString.escape(cells.Text));
+                        }
+                        return result.ToString();
+                    };
+
                     Func<int, string> numToAlphaC = (int val) => { return "" + (char)(((byte)'A') + val); };
                     Func<int, string> numToAlphaT = null;
                     numToAlphaT = (int val) => { return val < 9 ? numToAlphaC(val) : numToAlphaT(val / 10) + numToAlphaC(val % 10); };
@@ -1308,27 +1456,53 @@ namespace WpfApplication1 {
 
                     Func<int, int, string> cell = (int x, int y) => numToAlpha(x) + y.ToString();
 
-                    Func<int, int, string, bool> cellContains = (int x, int y, string str) => { return worksheet.Cells[cell(x, y)].Value.ToString() == str; };
+                    Func<int, int, string, StringOrigin, bool> cellContains = (int x, int y, string str, StringOrigin origin) => {
+                        String restr = unescaper(worksheet.Cells[cell(x, y)], origin).Replace("\r", "").Replace("\n", "<13>");
+                        if (restr == str) {
+                            return true;
+                        } else {
+                            errors.Add(String.Format(RelLanguage.LblStringCorruption, str, restr));
+                            return false;
+                        }
+                    };
 
                     // Verify that it's our format
                     bool isOurs = true;
-                    isOurs &= cellContains(1, 1, "String ID");
-                    isOurs &= cellContains(2, 1, "Original String");
-                    isOurs &= cellContains(3, 1, "Usage");
-                    isOurs &= cellContains(4, 1, "Translated String");
+                    isOurs &= cellContains(1, 1, "String ID", StringOrigin.Unused);
+                    isOurs &= cellContains(2, 1, "Original String", StringOrigin.Unused);
+                    isOurs &= cellContains(3, 1, "Usage", StringOrigin.Unused);
+                    isOurs &= cellContains(4, 1, "Translated String", StringOrigin.Unused);
+                    if (!isOurs) { errors.Add(RelLanguage.LblImportErHeaders); }
 
                     for (int i = 0; i < settings.originalStrings.Length; i++) {
                         TranslateString str = settings.ts[i];
-                        isOurs &= cellContains(1, 2 + i, str.StringIndex.ToString());
-                        isOurs &= cellContains(2, 2 + i, str.OriginalContents.Replace("\r\n","\n"));
-                        isOurs &= cellContains(3, 2 + i, str.description.Replace("\r\n", "\n"));
+                        StringOrigin origin = originResolver(str);
+                        isOurs &= cellContains(1, 2 + i, str.StringIndex.ToString(), origin);
+                        isOurs &= cellContains(2, 2 + i, str.OriginalContents.Replace("\r\n","<13>"), origin);
+                        isOurs &= cellContains(3, 2 + i, str.description.Replace("\r\n", "<13>"), origin);
                         if (!isOurs) {
+                            errors.Add(RelLanguage.LblOriginalDataCorrupted);
                             break;
                         }
                     }
 
                     if (!isOurs) {
-                        showErrorMessageBox(RelLanguage.WinImport, RelLanguage.ErrorImportFailed);
+                        StringBuilder sb = new StringBuilder();
+                        for(int i = 0; i < errors.Count; i++) {
+                            String err = errors[i];
+                            if (sb.Length > 0) {
+                                sb.Append("\r\n");
+                            }
+                            sb.Append(err);
+                            if(i == 15 && errors.Count > 15) {
+                                sb.Append("\r\n\r\n" + (errors.Count - 15) + " more");
+                                break;
+                            }
+                        }
+                        if (sb.Length == 0) {
+                            sb.Append(RelLanguage.LblNoDetailsAvailable);
+                        }
+                        showErrorMessageBox(RelLanguage.WinImport, RelLanguage.ErrorImportFailed + ".\r\n" + RelLanguage.LblImportErrDetails + ":\r\n" + sb.ToString());
                         return;
                     }
 
@@ -1351,9 +1525,9 @@ namespace WpfApplication1 {
                     newLanguages[languageID] = translation;
                     newStrings[languageID] = new String[settings.originalStrings.Length];
 
-                    for(int i = 0; i < settings.originalStrings.Length; i++) {
-                        String item = (String) worksheet.Cells[cell(4, 2 + i)].Value;
-                        newStrings[languageID][i] = TranslateString.unescape(item.Replace("\r", "").Replace("\n", "\r\n"));
+                    for (int i = 0; i < settings.originalStrings.Length; i++) {
+                        StringOrigin origin = originResolver(settings.ts[i]);
+                        newStrings[languageID][i] = unescaper(worksheet.Cells[cell(4, 2 + i)], origin).Replace("<13>", "\r\n");
                     }
 
                     settings.langauges = newLanguages;
@@ -1376,7 +1550,7 @@ namespace WpfApplication1 {
                     translations[i] = settings.langauges[i];
                 }
             //}
-            ImportWindow dialog = new ImportWindow(RelLanguage, (String translation, String filePath) => { importCB(settings, translation, filePath); }, translations);
+            ImportWindow dialog = new ImportWindow((String translation, String filePath) => { importCB(settings, translation, filePath); }, translations);
             if (dialog.isGood) {
                 dialog.ShowDialog();
             }
@@ -1445,9 +1619,9 @@ namespace WpfApplication1 {
         public String str { get { return settings.originalStrings[storageIndex]; } }
         public int storageIndex;
 
-        RelLanguage RelLanguage;
+        dynamic RelLanguage;
 
-        public TranslateString(RelLanguage RelLanguage, Settings settings, MapString ms, int index) {
+        public TranslateString(dynamic RelLanguage, Settings settings, MapString ms, int index) {
             this.settings = settings;
             this.RelLanguage = RelLanguage;
             this.storageIndex = index;
@@ -1539,27 +1713,21 @@ namespace WpfApplication1 {
                 case '9':
                     return 9;
                 case 'a':
-                    return 10;
                 case 'A':
                     return 10;
                 case 'b':
-                    return 11;
                 case 'B':
                     return 11;
                 case 'c':
-                    return 12;
                 case 'C':
                     return 12;
                 case 'd':
-                    return 13;
                 case 'D':
                     return 13;
                 case 'e':
-                    return 14;
                 case 'E':
                     return 14;
                 case 'f':
-                    return 15;
                 case 'F':
                     return 15;
                 default:

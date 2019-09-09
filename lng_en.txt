@@ -130,6 +130,7 @@ BtnExportTranslation=Export Translation
 BtnImportTranslation=Import Translation
 
 WinExport=Export Translation
+WinImport=Import Translation
 BtnExport=Export
 ExcelFile=Microsoft Office Excel Spreadsheet
 ErrorExportFailed=Export Failed.
@@ -146,3 +147,14 @@ LblErrorUncaughtException=Uncaught exception:
 LblErrorCrash=Application cannot continue.
 BtnExit=Exit
 LblErrorCallstackDetails=Details:
+LblEscapeColors=Use Color Codes
+LblEscapeNewlines=Escape Line Breaks
+
+ResColorErr=Failed to load starcraft colors. Please update.
+ResColorErrTitle=Internal Error
+
+LblImportErHeaders=Headers missing or corrupted
+LblOriginalDataCorrupted=Original data corrupted
+LblStringCorruption=Expected "{0}", got "{1}"
+LblNoDetailsAvailable=No deatials available.
+LblImportErrDetails=Details:

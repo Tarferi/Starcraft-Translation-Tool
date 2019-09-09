@@ -61,6 +61,41 @@ namespace TranslatorUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to title:
+        ///0x02=0xB8B8E8:Light Blue
+        ///0x03=0xF88C14:Orange
+        ///0x04=0xFFFFFF:White
+        ///0x05=0x847474:Grey
+        ///0x06=0x088008:Green
+        ///0x0D=0xB8B8E8:Light Blue
+        ///0x1A=0xB8B8E8:Light Blue
+        ///
+        ///briefing:
+        ///0x02=0xB8B8E8:Light Blue
+        ///0x03=0x088008:Green
+        ///0x04=0xACF46C:Light Green
+        ///0x05=0x847474:Grey
+        ///0x06=0xFFFFFF:White
+        ///0x07=0xF40404:Red (p1)
+        ///0x0D=0xB8B8E8:Light Blue
+        ///0x1A=0xB8B8E8:Light Blue
+        ///
+        ///game:
+        ///0x01=0xB8B8E8:Use Default
+        ///0x02=0xB8B8E8:Cyan
+        ///0x03=0xDCDC3C:Yellow
+        ///0x04=0xFFFFFF:White
+        ///0x05=0x847474:Grey
+        ///0x06=0xC81818:Red
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string colors {
+            get {
+                return ResourceManager.GetString("colors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] EPPlus {

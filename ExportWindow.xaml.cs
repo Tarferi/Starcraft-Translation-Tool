@@ -1,25 +1,25 @@
 ﻿using Microsoft.Win32;
+using QChkUI;
 using System;
 using System.Windows;
 
 namespace TranslatorUI {
-    /// <summary>
-    /// Interaction logic for ExportWindow.xaml
-    /// </summary>
+
     public partial class ExportWindow : Window {
 
-        public RelLanguage RelLanguage { get; set; }
+        public dynamic RelLanguage { get { return WpfApplication1.MainWindow.GetLanguage(); } }
 
-        private Action<string, string> callback;
+        private Action<string, string, bool, bool> callback;
 
-        public ExportWindow(RelLanguage RelLanguage, String[] strs, Action<string, string> callback) {
-            this.RelLanguage = RelLanguage;
+        public ExportWindow(String[] strs, Action<string, string, bool, bool> callback) {
             InitializeComponent();
             this.DataContext = this;
             this.callback = callback;
             foreach(String str in strs) {
                 cmbDefs.Items.Add(str);
             }
+            checkEscapeColors.IsChecked = History.storage.exportColorCodes;
+            checkEscapeNewLines.IsChecked = History.storage.exportEscapedLineBreaks;
             cmbDefs.SelectedIndex = 0;
         }
 
@@ -36,7 +36,10 @@ namespace TranslatorUI {
                 bool? b = openFileDialog.ShowDialog();
                 if (b == true) {
                     String filePath = openFileDialog.FileName;
-                    callback(copyOf, filePath);
+                    History.storage.exportColorCodes = checkEscapeColors.IsChecked == true;
+                    History.storage.exportEscapedLineBreaks = checkEscapeNewLines.IsChecked == true;
+                    History.storage.push();
+                    callback(copyOf, filePath, checkEscapeColors.IsChecked == true, checkEscapeNewLines.IsChecked == true);
                     this.Close();
                 }
             }
