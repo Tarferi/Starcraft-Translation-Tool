@@ -111,8 +111,7 @@
                     <MenuItem Header="{Binding RelLanguage.menuExit, Mode=OneWay, FallbackValue=[_Exit]}" Click="MenuItem_Click_3" />
                 </MenuItem>
                 <MenuItem x:Name="menuLng" Header="{Binding RelLanguage.menuLanguage, FallbackValue=[_Language], Mode=OneWay}">
-                    <MenuItem IsCheckable="True" IsChecked="{Binding isEnglish, FallbackValue=True}" Header="{Binding RelLanguage.menuEnglish, FallbackValue=[_English], Mode=OneWay}" Click="MenuItem_Click_4" />
-                    <MenuItem IsCheckable="True" IsChecked="{Binding isKorean, FallbackValue=False}" Header="{Binding RelLanguage.menuKorean, FallbackValue=[_Korean], Mode=OneWay}" Click="MenuItem_Click_5" IsEnabled="False" />
+                    
                 </MenuItem>
                 <MenuItem Header="{Binding RelLanguage.menuHelp, Mode=OneWay, FallbackValue=[_Help]}">
                     <MenuItem Header="{Binding RelLanguage.menuForum, Mode=OneWay, FallbackValue=[_Forum]}" Click="MenuItem_Click" />

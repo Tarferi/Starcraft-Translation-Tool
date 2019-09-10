@@ -181,6 +181,9 @@
   <ItemGroup>
     <EmbeddedResource Include="colors.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="lng_ru.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>del /S "$(SolutionDir)\Release\TranslatorUI.exe"</PreBuildEvent>

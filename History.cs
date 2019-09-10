@@ -12,6 +12,7 @@ namespace QChkUI {
         public String secretKey = "";
         public bool exportColorCodes = true;
         public bool exportEscapedLineBreaks = false;
+        public String language = "";
         
         public void read(ReadBuffer rb) {
             autoUpdate = rb.readBool();
@@ -19,6 +20,7 @@ namespace QChkUI {
             secretKey = rb.readString();
             exportColorCodes = rb.readBool();
             exportEscapedLineBreaks = rb.readBool();
+            language = rb.readString();
         }
 
         public void write(WriteBuffer wb) {
@@ -27,6 +29,7 @@ namespace QChkUI {
             wb.writeString(secretKey);
             wb.writeBool(exportColorCodes);
             wb.writeBool(exportEscapedLineBreaks);
+            wb.writeString(language);
         }
 
         public void push() {
@@ -39,7 +42,11 @@ namespace QChkUI {
         private static int historySize = 30; // 30 items per channel
         private static String historyFile = "hist.smthistory";
 
-        public static PersistantStorage storage = new PersistantStorage();
+        private static PersistantStorage _storage = null;
+
+        private static PersistantStorage _storageNoLoad { get { if (_storage == null) {_storage = new PersistantStorage(); } return _storage; } }
+
+        public static PersistantStorage storage { get { if(_storage == null) { History.open(null, null);} return _storageNoLoad; } }
 
         public static void save() {
             save(null, null);
@@ -52,7 +59,12 @@ namespace QChkUI {
                 }
                 byte[] bytes = File.ReadAllBytes(historyFile);
                 ReadBuffer rb = new ReadBuffer(bytes);
-                int sections = rb.readByte();
+                int sections = 0;
+                try {
+                    sections = rb.readByte();
+                } catch (OutOfBoundsReadException) { // No sections
+
+                }
                 bool foundSector = false;
                 WriteBuffer wb = new WriteBuffer();
                 wb.writeByte(sections);
@@ -92,7 +104,7 @@ namespace QChkUI {
                     }
                     sections++;
                 }
-                storage.write(wb);
+                _storageNoLoad.write(wb);
                 byte[] data = wb.ToArray();
                 data[0] = (byte)sections;
                 File.WriteAllBytes(historyFile, data);
@@ -107,7 +119,9 @@ namespace QChkUI {
                     byte[] bytes = File.ReadAllBytes(historyFile);
                     ReadBuffer rb = new ReadBuffer(bytes);
                     byte sections = (byte)rb.readByte();
-                    history.Items.Clear();
+                    if (history != null) {
+                        history.Items.Clear();
+                    }
                     for (int i = 0; i < sections; i++) {
                         String sectorName = rb.readString();
                         int sectorSize = rb.readInt();
@@ -119,13 +133,15 @@ namespace QChkUI {
                             for (int o = 0; o < sectorSize; o++) {
                                 String str = rb.readString();
                                 if (str != "") {
-                                    history.Items.Add(str);
+                                    if (history != null) {
+                                        history.Items.Add(str);
+                                    }
                                 }
                             }
                             break;
                         }
                     }
-                    storage.read(rb);
+                    _storageNoLoad.read(rb);
                 }
             } catch (OutOfBoundsReadException) { // Pass read beyond
                 return;

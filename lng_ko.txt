@@ -1,160 +1,161 @@
-﻿WinTitle=Starcraft Map Translator
-WinControl=Control
-WinTranslation=Translation
-WinFilters=Filtres
-WinProcess=Process
-WinAddTranslation=Add Translation
-WinDeleteTranslation=Delete Translation
-WinConfirmDeletion=Confirm Deletion
-
-BtnBrowse=Browse
-BtnLoad=Load
-BtnUnload=Unload
-BtnSave=Save
-BtnClose=Close
-BtnAddTranslation=Add Translation
-BtnRemoveTranslation=Remove Translation
-BtnRun=Run
-BtnCheck=Check
-BtnOpen=Open
-BtnCreate=Create
-BtnDelete=Delete
-
-FilterShowMapDetails=Show Map Details
-FilterShowTriggerText=Show Trigger Text
-FilterShowTriggerComments=Show Trigger Comments
-FilterShowLocationNames=Show Location Names
-FilterShowSwitchNames=Show Switch Names
-FilterShowUnitNames=Show Unit Names
-
-LblLanguage=Language:
-LblLoadedSettings=Input Settings:
-LblLoadedMap=Loaded Map:
-LblOutputMap=Output Map:
-LblGuard=Guard
-LblGuardSwitch=Switch
-LblGuardDeaths=Deaths
-LblDefaultValues=Default Values:
-LblDefault=<Default>
-LblConfirmDeletion=Are you sure you want to delete language "{0}"?
-
-TableUsage=Usage
-TableOriginal=Original
-
-ErrMissingStrings={0} string(s) were not found in saved session!\r\nThose strings will have default values in translation tables.
-ErrMissingMapStrings={0} string(s) were not found in map!\r\nThose strings will be removed from session file, including all translations!
-ErrRemapNeeded={0} string(s) were misplaced!\r\nIndexes will be corrected.
-ErrConfirmTranslationUpdate=Press OK to confirm changes or Cancel to unload map.
-WinMapErr=Map Error
-ErrUnsupportedMap=Given map is not supported
-ErrNoOutputMap=Please specify output map.
-ErrMapFailedToLoad=Failed to load given map.
-
-WinLoadSettings=Settings Load
-LblNewSettingsCreate=Would you like to create a new file at given location?\n(This might overwrite the file, if it already exists)
-WinSaveSettings=Settings Save
-ErrFailedToCreateSettings=Failed to create settings file
-LblSettingsSaved=Settings Saved
-ErrFailedToCreateTranslation=Failed to create new translation.
-ErrFailedToCreateTranslationLanguageExists=Failed to create new translation. There is already such language.
-
-ErrTranslationFailed=Translation failed
-ErrInvalidTargetLanguage=Invalid target language selected
-LblTranslationDone=Translation completed
-ErrGuardCannotBeUsed=Given guard cannot be used
-LblGuardCanBeUsed=Given guard can be used
-
-# List pseudoheader
-LblUnitNames=Unit names:
-LblSwitchNames=Switch names:
-LblLocationNames=Location names:
-LblInvalidIndex=Invalid index: {0}
-
-LblTriggerTexts=Triggers:
-LblTriggerComments=Comments:
-LblBriefings=Briefings:
-LblBriefingComments=Briefing Comments:
-LblForceNames=Force Names:
-
-#List elements
-LblUnitName=Unit {0}
-LblSwitchName=Switch {0}
-LblTrigger=Trigger {0}
-LblLocation=Location {0}
-LblTriggerComment=Comment {0}
-LblBriefingTrigger=Briefing Trigger {0}
-LblForceName=Force {0}
-LblMapName=Map Name
-LblMapDescription=Map Description
-LblAnywhere=Anywhere
-LblPlayer=Player {0}
-
-WinOpenSettingsDialogTitle=Open Translation Settings File
-FormatName=Starcraft map translation file
-
-WinOpenMapDialogTitle=Open Starcraft Map File
-WinSaveMapDialogTitle=Save Starcraft Map File
-BwMapName=Starcraft Brood War Map
-ScMapName=Starcraft Map
-ScMapFile=Starcraft Map File
-
-
-menuMainMenu=_Main
-menuExit=_Exit
-menuLanguage=_Language
-menuEnglish=_English
-menuKorean=_Korean
-menuHelp=_Help
-menuForum=_Forum
-menuUpdate=_Update
-menuAbout=_About
-
-WinUpdateTitle=Update
-BtnUpdate=Update
-BtnRestart=Restart
-LblCurrentVersion=Current version:
-LblRemoteVersion=Latest version:
-LblUpdateProgress=Update progress:
-ErrorUpdateGetRemoteVersion=Failed to determine remote version.
-ErrorFailedToDownloadUpdate=Failed to download update.
-ErrorUpdateInvalidDownload=Failed to download remote version.
-ErrorFailedToRunUpdator=Failed to run updator
-
-WinAbout=About
-LblCreator=Made By:
-LblVersion=Version:
-LblProduct=Starcraft Map Translation Tool
-LblAutoUpdate=Allow automatic checking for updates
-
-BtnExportTranslation=Export Translation
-BtnImportTranslation=Import Translation
-
-WinExport=Export Translation
-WinImport=Import Translation
-BtnExport=Export
-ExcelFile=Microsoft Office Excel Spreadsheet
-ErrorExportFailed=Export Failed.
-LblExportFinish=Export Finished.
-BtnImport=Import
-LblConfirmOverWrite=Language {0} already exists. Overwrite?
-
-ErrorImportFailed=Import failed.
-ErrorInvalidImportData=Import failed. Invalid import data.
-LblImportFinished=Import finished.
-
-WinError=Crash Handler
-LblErrorUncaughtException=Uncaught exception:
-LblErrorCrash=Application cannot continue.
-BtnExit=Exit
-LblErrorCallstackDetails=Details:
-LblEscapeColors=Use Color Codes
-LblEscapeNewlines=Escape Line Breaks
-
-ResColorErr=Failed to load starcraft colors. Please update.
-ResColorErrTitle=Internal Error
-
-LblImportErHeaders=Headers missing or corrupted
-LblOriginalDataCorrupted=Original data corrupted
-LblStringCorruption=Expected "{0}", got "{1}"
-LblNoDetailsAvailable=No deatials available.
-LblImportErrDetails=Details:
+﻿CurrentLanguage=한국어
+WinTitle=스타 크래프트지도 번역기
+WinControl=제어
+WinTranslation=번역
+WinFilters=필터
+WinProcess=방법
+WinAddTranslation=번역 추가
+WinDeleteTranslation=번역 삭제
+WinConfirmDeletion=삭제 확인
+	
+BtnBrowse=검색
+BtnLoad=하중
+BtnUnload=부리다
+BtnSave=구하다
+BtnClose=닫기
+BtnAddTranslation=번역 추가
+BtnRemoveTranslation=번역 제거
+BtnRun=운영
+BtnCheck=검사
+BtnOpen=열다
+BtnCreate=몹시 떠들어 대다
+BtnDelete=지우다
+	
+FilterShowMapDetails=지도 세부 사항 표시
+FilterShowTriggerText=트리거 텍스트 표시
+FilterShowTriggerComments=트리거 주석 표시
+FilterShowLocationNames=위치 이름 표시
+FilterShowSwitchNames=스위치 이름 표시
+FilterShowUnitNames=단위 이름 표시
+	
+LblLanguage=언어:
+LblLoadedSettings=입력 설정:
+LblLoadedMap=로드 된 맵:
+LblOutputMap=출력 맵:
+LblGuard=가드
+LblGuardSwitch=스위치
+LblGuardDeaths=죽음
+LblDefaultValues=기본값:
+LblDefault=<기본 설정>
+LblConfirmDeletion=언어 "{0}"을 (를) 삭제 하시겠습니까?
+	
+TableUsage=용법
+TableOriginal=기발한
+	
+ErrMissingStrings=저장된 세션에서 {0} 문자열을 찾을 수 없습니다! \ r \ n이 문자열은 변환 테이블에서 기본값을 갖습니다.
+ErrMissingMapStrings={0} 문자열이 맵에 없습니다! \ r \ n 모든 번역을 포함하여 해당 문자열이 세션 파일에서 제거됩니다!
+ErrRemapNeeded={0} 문자열이 잘못 배치되었습니다! \ r \ n 색인이 수정됩니다.
+ErrConfirmTranslationUpdate=확인을 눌러 변경 사항을 확인하거나 취소를 눌러 맵을 언로드하십시오.
+WinMapErr=지도 오류
+ErrUnsupportedMap=주어진지도는 지원되지 않습니다
+ErrNoOutputMap=출력 맵을 지정하십시오.
+ErrMapFailedToLoad=지정된지도를로드하지 못했습니다.
+	
+WinLoadSettings=설정로드
+LblNewSettingsCreate=지정된 위치에 새 파일을 만들겠습니까? \ n (파일이 이미있는 경우 덮어 쓸 수 있음)
+WinSaveSettings=설정 저장
+ErrFailedToCreateSettings=설정 파일을 만들지 못했습니다
+LblSettingsSaved=설정이 저장되었습니다
+ErrFailedToCreateTranslation=새 번역을 만들지 못했습니다.
+ErrFailedToCreateTranslationLanguageExists=새 번역을 만들지 못했습니다. 이미 그런 언어가 있습니다.
+	
+ErrTranslationFailed=번역 실패
+ErrInvalidTargetLanguage=잘못된 대상 언어가 선택되었습니다
+LblTranslationDone=번역 완료
+ErrGuardCannotBeUsed=주어진 경비는 사용할 수 없습니다
+LblGuardCanBeUsed=주어진 경비를 사용할 수 있습니다
+	
+# List pseudoheader	
+LblUnitNames=단위 이름:
+LblSwitchNames=스위치 이름:
+LblLocationNames=위치 이름:
+LblInvalidIndex=잘못된 인덱스: {0}
+	
+LblTriggerTexts=트리거:
+LblTriggerComments=코멘트:
+LblBriefings=브리핑:
+LblBriefingComments=브리핑 설명:
+LblForceNames=힘 이름:
+	
+#List elements	
+LblUnitName=단위 {0}
+LblSwitchName=스위치 {0}
+LblTrigger=트리거 {0}
+LblLocation=위치 {0}
+LblTriggerComment=댓글 {0}
+LblBriefingTrigger=브리핑 트리거 {0}
+LblForceName=힘 {0}
+LblMapName=지도 이름
+LblMapDescription=지도 설명
+LblAnywhere=어딘가에
+LblPlayer={0} 플레이어
+	
+WinOpenSettingsDialogTitle=번역 설정 파일 열기
+FormatName=스타 크래프트지도 번역 파일
+	
+WinOpenMapDialogTitle=스타 크래프트지도 파일 열기
+WinSaveMapDialogTitle=스타 크래프트지도 파일 저장
+BwMapName=스타 크래프트 무리 전쟁지도
+ScMapName=스타 크래프트지도
+ScMapFile=스타 크래프트지도 파일
+	
+	
+menuMainMenu=_본관
+menuExit=_출구
+menuLanguage=_언어
+menuEnglish=_영어
+menuKorean=_한국어
+menuHelp=_도움
+menuForum=_법정
+menuUpdate=_최신 정보
+menuAbout=_약
+	
+WinUpdateTitle=최신 정보
+BtnUpdate=최신 정보
+BtnRestart=재시작
+LblCurrentVersion=현재 버전:
+LblRemoteVersion=최신 버전:
+LblUpdateProgress=업데이트 진행:
+ErrorUpdateGetRemoteVersion=원격 버전을 확인하지 못했습니다.
+ErrorFailedToDownloadUpdate=업데이트를 다운로드하지 못했습니다.
+ErrorUpdateInvalidDownload=원격 버전을 다운로드하지 못했습니다.
+ErrorFailedToRunUpdator=업데이트자를 실행하지 못했습니다.
+	
+WinAbout=약
+LblCreator=제작자:
+LblVersion=번역:
+LblProduct=스타 크래프트지도 번역 도구
+LblAutoUpdate=업데이트 자동 확인 허용
+	
+BtnExportTranslation=번역 내보내기
+BtnImportTranslation=번역 가져 오기
+	
+WinExport=번역 내보내기
+WinImport=번역 가져 오기
+BtnExport=수출
+ExcelFile=Microsoft Office Excel 스프레드 시트
+ErrorExportFailed=내보내기에 실패했습니다.
+LblExportFinish=수출이 완료되었습니다.
+BtnImport=수입
+LblConfirmOverWrite=언어 {0}이 (가) 이미 존재합니다. 덮어 쓰시겠습니까?
+	
+ErrorImportFailed=가져 오기에 실패했습니다.
+ErrorInvalidImportData=가져 오기에 실패했습니다. 잘못된 가져 오기 데이터입니다.
+LblImportFinished=가져 오기가 완료되었습니다.
+	
+WinError=충돌 처리기
+LblErrorUncaughtException=잡히지 않은 예외:
+LblErrorCrash=신청을 계속할 수 없습니다.
+BtnExit=출구
+LblErrorCallstackDetails=세부:
+LblEscapeColors=색상 코드 사용
+LblEscapeNewlines=줄 바꿈 탈출
+	
+ResColorErr=스타 크래프트 색상을로드하지 못했습니다. 업데이트하십시오.
+ResColorErrTitle=내부 오류
+	
+LblImportErHeaders=헤더가 없거나 손상되었습니다
+LblOriginalDataCorrupted=원본 데이터가 손상되었습니다
+LblStringCorruption={0}이 (가) 필요합니다. "{1}"
+LblNoDetailsAvailable=사용할 수있는 자료가 없습니다.
+LblImportErrDetails=세부:

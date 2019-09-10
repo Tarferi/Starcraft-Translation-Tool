@@ -1,4 +1,5 @@
-﻿WinTitle=Starcraft Map Translator
+﻿CurrentLanguage=English
+WinTitle=Starcraft Map Translator
 WinControl=Control
 WinTranslation=Translation
 WinFilters=Filtres

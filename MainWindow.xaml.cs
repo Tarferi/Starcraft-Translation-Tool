@@ -45,12 +45,21 @@ namespace WpfApplication1 {
         }
 
         public dynamic RelLanguage { get { return __lng; } set { __lng = value; } }
-        public bool isEnglish { get { return RelLanguage.languageName == "en"; } set { } }
-        public bool isKorean { get { return RelLanguage.languageName == "ko"; } set { } }
+ 
+        private LanguageManager lngs;
 
         public MainWindow() {
+            lngs = new LanguageManager();
+            if (!lngs.Valid) {
+                showErrorMessageBox("Critical error", "Failed to load language manager.");
+                return;
+            }
+            RelLanguage = lngs.DefaultLanguage;
+
             InitializeComponent();
-            setLanguage("en");
+
+            setLanguage(lngs.DefaultLanguage);
+            populateLanguages();
 
             tblTrans.EnableColumnVirtualization = true;
             tblTrans.EnableRowVirtualization = true;
@@ -76,12 +85,48 @@ namespace WpfApplication1 {
             }
         }
 
+        private void populateLanguages() {
+            String preferredLanguage = History.storage.language;
+            RelLanguage preferredLang = null;
+            RoutedEventHandler preferredLangItm = null;
+
+            try {
+                List<MenuItem> allItems = new List<MenuItem>();
+                foreach (RelLanguage lng in lngs.Languages) {
+                    MenuItem itm = new MenuItem();
+                    itm.IsCheckable = true;
+                    itm.IsChecked = lng == lngs.DefaultLanguage;
+                    itm.Header = lng.__LanguageName;
+                    RoutedEventHandler clickHandle = (object sender, RoutedEventArgs e) => {
+                        foreach (MenuItem itmm in allItems) {
+                            itmm.IsChecked = false;
+                        }
+                        itm.IsChecked = true;
+                        setLanguage(lng);
+                        History.storage.language = lng.__LanguageName;
+                        History.storage.push();
+                    };
+                    itm.Click += clickHandle;
+                    allItems.Add(itm);
+                    menuLng.Items.Add(itm);
+                    if (lng.__LanguageName == preferredLanguage && preferredLanguage.Length > 0) {
+                        preferredLang = lng;
+                        preferredLangItm = clickHandle;
+                    }
+                }
+                if (preferredLang != null) {
+                    preferredLangItm(null, null);
+                }
+            } catch (Exception) { }
+        }
+
         public void asyncFoundUpdate() {
             new UpdateWindow(RelLanguage).ShowDialog();
         }
 
-        private void setLanguage(String lng) {
-            RelLanguage = TranslatorUI.RelLanguage.fromResource(lng, lng);
+        private void setLanguage(RelLanguage lng) {
+            RelLanguage = lng;
+            setState(state);
             this.DataContext = null;
             this.DataContext = this;
         }
@@ -1171,14 +1216,6 @@ namespace WpfApplication1 {
 
         private void MenuItem_Click_3(object sender, RoutedEventArgs e) {
             this.Close();
-        }
-
-        private void MenuItem_Click_4(object sender, RoutedEventArgs e) {
-            setLanguage("en");
-        }
-
-        private void MenuItem_Click_5(object sender, RoutedEventArgs e) {
-            setLanguage("ko");
         }
 
         enum StringOrigin {

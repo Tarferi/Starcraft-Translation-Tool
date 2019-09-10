@@ -7,18 +7,51 @@ using System.Reflection;
 
 namespace TranslatorUI {
 
+    public class LanguageManager {
+
+        public readonly RelLanguage[] Languages;
+
+        public readonly RelLanguage DefaultLanguage = null;
+
+        public bool Valid { get { return DefaultLanguage != null; } }
+
+        public LanguageManager() {
+            String[] resources = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+            List<RelLanguage> languages = new List<RelLanguage>();
+            foreach(String resource in resources) {
+                if(resource.StartsWith("TranslatorUI.lng_") && resource.EndsWith(".txt")) {
+                    try { 
+                    RelLanguage rl = RelLanguage.fromResource(resource);
+                        if (rl.__Valid) {
+                            languages.Add(rl);
+                            if (rl.__LanguageName == "English") {
+                                DefaultLanguage = rl;
+                            }
+                        }
+                    } catch (Exception) { }
+                }
+            }
+            Languages = new RelLanguage[languages.Count];
+            for(int i = 0; i < languages.Count; i++) {
+                Languages[i] = languages[i];
+            }
+        }
+
+    }
+
     public class RelLanguage : DynamicObject {
 
         private Dictionary<String, object> languageData;
 
-        private RelLanguage(String languageName, Dictionary<String, object> data) {
+        private RelLanguage(Dictionary<String, object> data) {
             this.languageData = data;
-            this.languageName = languageName;
         }
 
-        public String languageName;
+        public String __LanguageName { get { return __Valid ? this.languageData["CurrentLanguage"].ToString() : "Invalid Language"; } }
 
-        public static RelLanguage fromString(String languageName, String contents) {
+        public bool __Valid { get { return this.languageData.ContainsKey("CurrentLanguage"); } }
+
+        public static RelLanguage fromString(String contents) {
             Dictionary<String, object> languageData = new Dictionary<string, object>();
             String[] data = contents.Split('\n');
             foreach (String str in data) {
@@ -34,24 +67,27 @@ namespace TranslatorUI {
                     }
                 }
             }
-            return new RelLanguage(languageName, languageData);
+            return new RelLanguage(languageData);
         }
 
-        public static RelLanguage fromResource(String languageName, String file) {
+        public static RelLanguage fromResource(String file) {
             try {
                 var assembly = Assembly.GetExecutingAssembly();
-                string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("lng_" + file + ".txt"));
+                //string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("lng_" + file + ".txt"));
+                string resourceName = file;
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName)) {
                     using (StreamReader reader = new StreamReader(stream)) {
                         String result = reader.ReadToEnd();
-                        return RelLanguage.fromString(languageName, result);
+                        return RelLanguage.fromString(result);
                     }
                 }
             } catch (Exception) { // Fallback to defaults
             }
-            return new RelLanguage(languageName, new Dictionary<string, object>());
+            return new RelLanguage(new Dictionary<string, object>());
         }
+
+
 
         public override bool TryGetMember(GetMemberBinder binder, out object result) {
             if (languageData.ContainsKey(binder.Name)) {

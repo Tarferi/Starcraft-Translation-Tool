@@ -106,6 +106,36 @@ namespace TranslatorUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CurrentLanguage=русский
+        ///WinTitle=Starcraft карта переводчик
+        ///WinControl=контроль
+        ///WinTranslation=перевод
+        ///WinFilters=Filtres
+        ///WinProcess=процесс
+        ///WinAddTranslation=Добавить перевод
+        ///WinDeleteTranslation=Удалить перевод
+        ///WinConfirmDeletion=Подтвердите удаление
+        ///	
+        ///BtnBrowse=пролистать
+        ///BtnLoad=нагрузка
+        ///BtnUnload=разгружать
+        ///BtnSave=Сохранить
+        ///BtnClose=близко
+        ///BtnAddTranslation=Добавить перевод
+        ///BtnRemoveTranslation=Удалить перевод
+        ///BtnRun=пробег
+        ///BtnCheck=Проверить
+        ///BtnOpen=открытый
+        ///BtnCreate=создать
+        ///Btn [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string lng_ru {
+            get {
+                return ResourceManager.GetString("lng_ru", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] TranslateLib {
