@@ -1,161 +1,161 @@
-﻿CurrentLanguage=한국어
-WinTitle=스타 크래프트지도 번역기
-WinControl=제어
+CurrentLanguage=한국어
+WinTitle=스타크래프트 맵 번역기
+WinControl=컨트롤
 WinTranslation=번역
 WinFilters=필터
-WinProcess=방법
+WinProcess=프로세스
 WinAddTranslation=번역 추가
 WinDeleteTranslation=번역 삭제
 WinConfirmDeletion=삭제 확인
-	
-BtnBrowse=검색
-BtnLoad=하중
-BtnUnload=부리다
-BtnSave=구하다
+
+BtnBrowse=찾아보기
+BtnLoad=불러오기
+BtnUnload=언로드
+BtnSave=저장
 BtnClose=닫기
 BtnAddTranslation=번역 추가
 BtnRemoveTranslation=번역 제거
-BtnRun=운영
-BtnCheck=검사
-BtnOpen=열다
-BtnCreate=몹시 떠들어 대다
-BtnDelete=지우다
-	
-FilterShowMapDetails=지도 세부 사항 표시
-FilterShowTriggerText=트리거 텍스트 표시
-FilterShowTriggerComments=트리거 주석 표시
-FilterShowLocationNames=위치 이름 표시
-FilterShowSwitchNames=스위치 이름 표시
-FilterShowUnitNames=단위 이름 표시
-	
+BtnRun=실행
+BtnCheck=확인
+BtnOpen=열기
+BtnCreate=만들기
+BtnDelete=삭제
+
+FilterShowMapDetails=맵 정보 보기
+FilterShowTriggerText=트리거 텍스트 보기
+FilterShowTriggerComments=트리거 주석 보기
+FilterShowLocationNames=로케이션 이름 보기
+FilterShowSwitchNames=스위치 이름 보기
+FilterShowUnitNames=유닛 이름 보기
+
 LblLanguage=언어:
 LblLoadedSettings=입력 설정:
-LblLoadedMap=로드 된 맵:
-LblOutputMap=출력 맵:
+LblLoadedMap=불러온 맵:
+LblOutputMap=결과물 맵:
 LblGuard=가드
 LblGuardSwitch=스위치
-LblGuardDeaths=죽음
+LblGuardDeaths=데스
 LblDefaultValues=기본값:
-LblDefault=<기본 설정>
-LblConfirmDeletion=언어 "{0}"을 (를) 삭제 하시겠습니까?
-	
-TableUsage=용법
-TableOriginal=기발한
-	
-ErrMissingStrings=저장된 세션에서 {0} 문자열을 찾을 수 없습니다! \ r \ n이 문자열은 변환 테이블에서 기본값을 갖습니다.
-ErrMissingMapStrings={0} 문자열이 맵에 없습니다! \ r \ n 모든 번역을 포함하여 해당 문자열이 세션 파일에서 제거됩니다!
-ErrRemapNeeded={0} 문자열이 잘못 배치되었습니다! \ r \ n 색인이 수정됩니다.
-ErrConfirmTranslationUpdate=확인을 눌러 변경 사항을 확인하거나 취소를 눌러 맵을 언로드하십시오.
-WinMapErr=지도 오류
-ErrUnsupportedMap=주어진지도는 지원되지 않습니다
-ErrNoOutputMap=출력 맵을 지정하십시오.
-ErrMapFailedToLoad=지정된지도를로드하지 못했습니다.
-	
-WinLoadSettings=설정로드
-LblNewSettingsCreate=지정된 위치에 새 파일을 만들겠습니까? \ n (파일이 이미있는 경우 덮어 쓸 수 있음)
+LblDefault=<기본>
+LblConfirmDeletion=언어 "{0}"를 삭제하시겠습니까?
+
+TableUsage=용도
+TableOriginal=원본
+
+ErrMissingStrings=저장된 세션에서 문자열 {0} 개를 찾을 수 없습니다!\r\n이 문자열의 기본값은 번역 자료에서 가져옵니다.
+ErrMissingMapStrings=맵에서 문자열 {0} 개를 찾을 수 없습니다!\r\n이 문자열은 세션 파일과 모든 번역 파일에서 제거됩니다!
+ErrRemapNeeded=문자열 {0} 개의 위치가 부적절합니다!\r\n인덱스가 정정될 것입니다.
+ErrConfirmTranslationUpdate=확인을 눌러 변경사항을 확인하거나 취소를 눌러 맵을 언로드하십시오.
+WinMapErr=맵 오류
+ErrUnsupportedMap=지원하지 않는 맵입니다
+ErrNoOutputMap=결과물 맵을 지정해주세요.
+ErrMapFailedToLoad=주어진 맵을 불러오는데 실패했습니다.
+
+WinLoadSettings=설정 불러오기
+LblNewSettingsCreate=지정된 위치에 새 파일을 만들겠습니까?\n(파일이 이미있는 경우 덮어 쓸 수 있음)
 WinSaveSettings=설정 저장
-ErrFailedToCreateSettings=설정 파일을 만들지 못했습니다
-LblSettingsSaved=설정이 저장되었습니다
-ErrFailedToCreateTranslation=새 번역을 만들지 못했습니다.
-ErrFailedToCreateTranslationLanguageExists=새 번역을 만들지 못했습니다. 이미 그런 언어가 있습니다.
-	
+ErrFailedToCreateSettings=설정 파일을 만드는데 실패했습니다
+LblSettingsSaved=설정 저장됨
+ErrFailedToCreateTranslation=새 번역을 만드는데 실패했습니다.
+ErrFailedToCreateTranslationLanguageExists=새 번역을 만드는데 실패했습니다. 이미 그 언어가 있습니다.
+
 ErrTranslationFailed=번역 실패
-ErrInvalidTargetLanguage=잘못된 대상 언어가 선택되었습니다
+ErrInvalidTargetLanguage=유효하지 않은 번역 언어를 선택하였습니다
 LblTranslationDone=번역 완료
-ErrGuardCannotBeUsed=주어진 경비는 사용할 수 없습니다
-LblGuardCanBeUsed=주어진 경비를 사용할 수 있습니다
-	
-# List pseudoheader	
-LblUnitNames=단위 이름:
+ErrGuardCannotBeUsed=해당 가드는 사용할 수 없습니다
+LblGuardCanBeUsed=해당 가드를 사용할 수 있습니다
+
+# List pseudoheader
+LblUnitNames=유닛 이름:
 LblSwitchNames=스위치 이름:
-LblLocationNames=위치 이름:
-LblInvalidIndex=잘못된 인덱스: {0}
-	
+LblLocationNames=로케이션 이름:
+LblInvalidIndex=유효하지 않은 인덱스: {0}
+
 LblTriggerTexts=트리거:
-LblTriggerComments=코멘트:
+LblTriggerComments=주석:
 LblBriefings=브리핑:
-LblBriefingComments=브리핑 설명:
-LblForceNames=힘 이름:
-	
-#List elements	
-LblUnitName=단위 {0}
+LblBriefingComments=브리핑 주석:
+LblForceNames=포스 이름:
+
+#List elements
+LblUnitName=유닛 {0}
 LblSwitchName=스위치 {0}
 LblTrigger=트리거 {0}
-LblLocation=위치 {0}
-LblTriggerComment=댓글 {0}
+LblLocation=로케이션 {0}
+LblTriggerComment=주석 {0}
 LblBriefingTrigger=브리핑 트리거 {0}
-LblForceName=힘 {0}
-LblMapName=지도 이름
-LblMapDescription=지도 설명
-LblAnywhere=어딘가에
-LblPlayer={0} 플레이어
-	
+LblForceName=포스 {0}
+LblMapName=맵 제목
+LblMapDescription=맵 설명
+LblAnywhere=Anywhere
+LblPlayer=플레이어 {0}
+
 WinOpenSettingsDialogTitle=번역 설정 파일 열기
-FormatName=스타 크래프트지도 번역 파일
-	
-WinOpenMapDialogTitle=스타 크래프트지도 파일 열기
-WinSaveMapDialogTitle=스타 크래프트지도 파일 저장
-BwMapName=스타 크래프트 무리 전쟁지도
-ScMapName=스타 크래프트지도
-ScMapFile=스타 크래프트지도 파일
-	
-	
-menuMainMenu=_본관
-menuExit=_출구
-menuLanguage=_언어
-menuEnglish=_영어
-menuKorean=_한국어
-menuHelp=_도움
-menuForum=_법정
-menuUpdate=_최신 정보
-menuAbout=_약
-	
-WinUpdateTitle=최신 정보
-BtnUpdate=최신 정보
+FormatName=스타크래프트 맵 번역 파일
+
+WinOpenMapDialogTitle=스타크래프트 맵 파일 열기
+WinSaveMapDialogTitle=스타크래프트 맵 파일 저장
+BwMapName=스타크래프트 브루드워 맵
+ScMapName=스타크래프트 맵
+ScMapFile=스타크래프트 맵 파일
+
+
+menuMainMenu=메인(_M)
+menuExit=종료(_E)
+menuLanguage=언어(_L)
+menuEnglish=영어(_E)
+menuKorean=한국어(_K)
+menuHelp=도움말(_H)
+menuForum=포럼(_F)
+menuUpdate=업데이트(_U)
+menuAbout=정보(_A)
+
+WinUpdateTitle=업데이트
+BtnUpdate=업데이트
 BtnRestart=재시작
 LblCurrentVersion=현재 버전:
 LblRemoteVersion=최신 버전:
-LblUpdateProgress=업데이트 진행:
-ErrorUpdateGetRemoteVersion=원격 버전을 확인하지 못했습니다.
-ErrorFailedToDownloadUpdate=업데이트를 다운로드하지 못했습니다.
-ErrorUpdateInvalidDownload=원격 버전을 다운로드하지 못했습니다.
-ErrorFailedToRunUpdator=업데이트자를 실행하지 못했습니다.
-	
-WinAbout=약
+LblUpdateProgress=업데이트 진행도:
+ErrorUpdateGetRemoteVersion=최신 버전을 확인하는데 실패했습니다.
+ErrorFailedToDownloadUpdate=업데이트 다운로드에 실패했습니다.
+ErrorUpdateInvalidDownload=최신 버전 다운로드를 실패했습니다.
+ErrorFailedToRunUpdator=업데이터 실행 실패
+
+WinAbout=정보
 LblCreator=제작자:
-LblVersion=번역:
-LblProduct=스타 크래프트지도 번역 도구
-LblAutoUpdate=업데이트 자동 확인 허용
-	
+LblVersion=버전:
+LblProduct=스타크래프트 맵 번역 툴
+LblAutoUpdate=자동 업데이트 확인 허용하기
+
 BtnExportTranslation=번역 내보내기
-BtnImportTranslation=번역 가져 오기
-	
+BtnImportTranslation=번역 불러오기
+
 WinExport=번역 내보내기
-WinImport=번역 가져 오기
-BtnExport=수출
-ExcelFile=Microsoft Office Excel 스프레드 시트
-ErrorExportFailed=내보내기에 실패했습니다.
-LblExportFinish=수출이 완료되었습니다.
-BtnImport=수입
-LblConfirmOverWrite=언어 {0}이 (가) 이미 존재합니다. 덮어 쓰시겠습니까?
-	
-ErrorImportFailed=가져 오기에 실패했습니다.
-ErrorInvalidImportData=가져 오기에 실패했습니다. 잘못된 가져 오기 데이터입니다.
-LblImportFinished=가져 오기가 완료되었습니다.
-	
+WinImport=번역 불러오기
+BtnExport=내보내기
+ExcelFile=엑셀 스프레드시트
+ErrorExportFailed=내보내기 실패.
+LblExportFinish=내보내기 완료.
+BtnImport=불러오기
+LblConfirmOverWrite=언어 {0}는 이미 존재합니다. 덮어쓸까요?
+
+ErrorImportFailed=불러오기 실패.
+ErrorInvalidImportData=불러오기 실패. 유효하지 않은 데이터.
+LblImportFinished=불러오기 완료.
+
 WinError=충돌 처리기
-LblErrorUncaughtException=잡히지 않은 예외:
-LblErrorCrash=신청을 계속할 수 없습니다.
-BtnExit=출구
-LblErrorCallstackDetails=세부:
+LblErrorUncaughtException=처리되지 않은 예외:
+LblErrorCrash=어플리케이션을 계속할 수 없습니다.
+BtnExit=나가기
+LblErrorCallstackDetails=자세히:
 LblEscapeColors=색상 코드 사용
-LblEscapeNewlines=줄 바꿈 탈출
-	
-ResColorErr=스타 크래프트 색상을로드하지 못했습니다. 업데이트하십시오.
+LblEscapeNewlines=줄바꿈 이스케이프
+
+ResColorErr=스타크래프트 색상을 불러오는데 실패했습니다. 업데이트가 필요합니다.
 ResColorErrTitle=내부 오류
-	
+
 LblImportErHeaders=헤더가 없거나 손상되었습니다
 LblOriginalDataCorrupted=원본 데이터가 손상되었습니다
-LblStringCorruption={0}이 (가) 필요합니다. "{1}"
-LblNoDetailsAvailable=사용할 수있는 자료가 없습니다.
-LblImportErrDetails=세부:
+LblStringCorruption="{0}"가 올 자리에, "{1}"가 입력됨
+LblNoDetailsAvailable=세부내역 없음.
+LblImportErrDetails=자세히:
