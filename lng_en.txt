@@ -157,5 +157,5 @@ ResColorErrTitle=Internal Error
 LblImportErHeaders=Headers missing or corrupted
 LblOriginalDataCorrupted=Original data corrupted
 LblStringCorruption=Expected "{0}", got "{1}"
-LblNoDetailsAvailable=No deatials available.
+LblNoDetailsAvailable=No details available.
 LblImportErrDetails=Details:
