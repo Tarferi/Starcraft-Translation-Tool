@@ -159,3 +159,5 @@ LblOriginalDataCorrupted=원본 데이터가 손상되었습니다
 LblStringCorruption="{0}"가 올 자리에, "{1}"가 입력됨
 LblNoDetailsAvailable=세부내역 없음.
 LblImportErrDetails=자세히:
+
+lblRepack=재 포장

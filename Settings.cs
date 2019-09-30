@@ -16,6 +16,7 @@ namespace WpfApplication1 {
         public String[] originalStrings;
 
         public int useCondition;
+        public bool repack = true;
 
         public byte result;
 
@@ -24,7 +25,7 @@ namespace WpfApplication1 {
         private Settings() {
 
         }
-   
+
         public static Settings loadFromFile(String fileName) {
             Settings s = new Settings();
             try {
@@ -40,8 +41,13 @@ namespace WpfApplication1 {
                 s.useCondition = rb.readInt();
                 s.lastKnownMapping = rb.readIntArray(rb.readInt());
                 s.originalStrings = rb.readStringArray();
-                
-                
+
+                // New ver
+                try {
+                    s.repack = rb.readBool();
+                } catch (Exception) {
+                }
+
             } catch (Exception) {
                 return null;
             }
@@ -62,6 +68,8 @@ namespace WpfApplication1 {
                 wb.writeInt(this.lastKnownMapping.Length);
                 wb.writeArray(this.lastKnownMapping);
                 wb.writeArray(this.originalStrings);
+
+                wb.writeBool(this.repack);
 
                 File.WriteAllBytes(file, wb.ToArray());
                 return true;

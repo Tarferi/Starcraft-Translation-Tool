@@ -159,3 +159,5 @@ LblOriginalDataCorrupted=Original data corrupted
 LblStringCorruption=Expected "{0}", got "{1}"
 LblNoDetailsAvailable=No details available.
 LblImportErrDetails=Details:
+
+lblRepack=Repack

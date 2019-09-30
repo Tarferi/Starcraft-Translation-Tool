@@ -246,6 +246,8 @@ namespace WpfApplication1 {
 
                 btnExportTranslation.IsEnabled = true;
                 btnImportTranslation.IsEnabled = true;
+
+                checkRepack.IsEnabled = true;
             }
         }
 
@@ -289,6 +291,8 @@ namespace WpfApplication1 {
 
             btnExportTranslation.IsEnabled = false;
             btnImportTranslation.IsEnabled = false;
+
+            checkRepack.IsEnabled = false;
         }
 
         private void clearTable() {
@@ -330,6 +334,7 @@ namespace WpfApplication1 {
             } else if (settings.langauges.Length > 0) {
                 comboRunLanguage.SelectedIndex = 0;
             }
+            checkRepack.IsChecked = settings.repack;
         }
 
         private static int getInt(String str) {
@@ -370,6 +375,7 @@ namespace WpfApplication1 {
             settings.inpuPath = getComboBox(txtInMap);
             settings.outputPath = getComboBox(txtOutMap);
 
+            settings.repack = (bool) checkRepack.IsChecked;
 
             TranslateString[] strings = getCurrentStrings();
             /*

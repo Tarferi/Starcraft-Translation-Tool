@@ -42,9 +42,10 @@
                     <Button x:Name="brwsBtnSettings" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSettings_Click" Grid.Column="3"/>
                     <Button x:Name="brwsBtnSaveSettings" Content="{Binding RelLanguage.BtnOpen, Mode=OneWay, FallbackValue=[Open]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSaveSettings_Click" Grid.Column="2"/>
                     <TextBlock HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblOutputMap, Mode=OneWay, FallbackValue=[Output map:]}" VerticalAlignment="Center" FontSize="14" Grid.Row="2"/>
-                    <ComboBox x:Name="txtOutMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <ComboBox x:Name="txtOutMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="2"/>
                     <Button x:Name="brwsBtnOutMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnOutMap_Click" Grid.Column="3" Grid.Row="2"/>
                     <Button x:Name="btnOpenMap" Content="{Binding RelLanguage.BtnLoad, Mode=OneWay, FallbackValue=[Load]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="btnOpenMap_Click" Grid.Column="2" Grid.Row="1"/>
+                    <CheckBox x:Name="checkRepack" Content="{Binding RelLanguage.lblRepack, Mode=OneWay, FallbackValue=[Repack]}" Grid.Column="2" Margin="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
 
 
