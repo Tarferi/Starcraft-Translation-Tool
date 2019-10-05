@@ -2,7 +2,7 @@
 WinTitle=Starcraft Map Translator
 WinControl=Control
 WinTranslation=Translation
-WinFilters=Filtres
+WinFilters=Filters
 WinProcess=Process
 WinAddTranslation=Add Translation
 WinDeleteTranslation=Delete Translation
