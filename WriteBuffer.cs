@@ -8,7 +8,7 @@ namespace WpfApplication1 {
         private MemoryStream me;
 
         public void writeByte(int value) {
-            me.WriteByte((byte)(value & 0xff));
+            me.WriteByte((byte) (value & 0xff));
         }
 
         public void writeShort(int value) {
@@ -30,27 +30,31 @@ namespace WpfApplication1 {
             writeByte(value ? 1 : 0);
         }
 
-        public void writeString(String value) {
-            value = value == null ? "" : value;
-            byte[] str = Encoding.GetEncoding("EUC-KR").GetBytes(value);
-            writeInt(str.Length);
-            for (int i = 0; i < str.Length; i++) {
-                byte chr = str[i];
+        public void writeByteArray(byte[] data) {
+            writeInt(data.Length);
+            for (int i = 0; i < data.Length; i++) {
+                byte chr = data[i];
                 writeByte(chr);
             }
         }
 
-        public void writeArray(String[] ba) {
+        public void writeString(String value, String encoding) {
+            value = value == null ? "" : value;
+            byte[] str = Encoding.GetEncoding(encoding).GetBytes(value);
+            writeByteArray(str);
+        }
+
+        public void writeArray(String[] ba, String encoding) {
             writeInt(ba.Length);
             for (int i = 0; i < ba.Length; i++) {
-                writeString(ba[i]);
+                writeString(ba[i], encoding);
             }
         }
 
-        public void writeArrayArray(String[][] ba) {
+        public void writeArrayArray(String[][] ba, String[] encodings) {
             writeInt(ba.Length);
             for (int i = 0; i < ba.Length; i++) {
-                writeArray(ba[i]);
+                writeArray(ba[i], encodings[i]);
             }
         }
 
@@ -64,19 +68,19 @@ namespace WpfApplication1 {
 
         public void writeArray(byte[] ba) {
             for (int i = 0; i < ba.Length; i++) {
-                writeByte((byte)ba[i]);
+                writeByte((byte) ba[i]);
             }
         }
 
         public void writeArray(short[] ba) {
             for (int i = 0; i < ba.Length; i++) {
-                writeShort((short)ba[i]);
+                writeShort((short) ba[i]);
             }
         }
 
         public void writeArray(int[] ba) {
             for (int i = 0; i < ba.Length; i++) {
-                writeInt((int)ba[i]);
+                writeInt((int) ba[i]);
             }
         }
 

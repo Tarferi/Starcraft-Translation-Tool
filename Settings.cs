@@ -5,14 +5,20 @@ namespace WpfApplication1 {
 
     public class Settings {
 
+        public static readonly String defaultEncoding = "UTF-8";
+
         public String settingsPath;
         public String inpuPath;
         public String outputPath;
 
         public String[] langauges;
+        public String[] encodings;
         public String[][] strings;
 
         public int[] lastKnownMapping;
+
+        public String originalEncoding;
+
         public String[] originalStrings;
 
         public int useCondition;
@@ -26,48 +32,104 @@ namespace WpfApplication1 {
 
         }
 
-        public static Settings loadFromFile(String fileName) {
+        private static Settings loadVersioned(byte[] bytes, String fileName) {
             Settings s = new Settings();
+            s.settingsPath = fileName;
             try {
-                byte[] bytes = File.ReadAllBytes(fileName);
                 ReadBuffer rb = new ReadBuffer(bytes);
-                s.settingsPath = fileName;
-                s.inpuPath = rb.readString();
-                s.outputPath = rb.readString();
 
-                s.langauges = rb.readStringArray();
-                s.strings = rb.readStringArrayArray();
+                String ver = rb.readString(defaultEncoding);
+                if (ver == "version") {
+                    int verNumber = rb.readInt();
+                    if (verNumber == 1) {
+                        s.inpuPath = rb.readString(defaultEncoding);
+                        s.outputPath = rb.readString(defaultEncoding);
 
-                s.useCondition = rb.readInt();
-                s.lastKnownMapping = rb.readIntArray(rb.readInt());
-                s.originalStrings = rb.readStringArray();
+                        s.langauges = rb.readStringArray(defaultEncoding);
+                        s.encodings = rb.readStringArray(defaultEncoding);
+
+                        s.strings = rb.readStringArrayArray(s.encodings);
+
+                        s.useCondition = rb.readInt();
+                        s.lastKnownMapping = rb.readIntArray(rb.readInt());
+
+                        s.originalEncoding = rb.readString(defaultEncoding);
+                        s.originalStrings = rb.readStringArray(s.originalEncoding);
+
+                        s.repack = rb.readBool();
+                    }
+
+                } else { // Load vanilla settings and generate rest
+                    rb = new ReadBuffer(bytes);
+                    String encoding = "EUC-KR";
+
+                    s.inpuPath = rb.readString(encoding);
+                    s.outputPath = rb.readString(encoding);
+
+                    s.langauges = rb.readStringArray(encoding);
+                    s.encodings = new string[s.langauges.Length];
+                    for (int i = 0; i < s.encodings.Length; i++) {
+                        s.encodings[i] = "EUC-KR";
+                    }
+
+                    s.strings = rb.readStringArrayArray(s.encodings);
+
+                    s.useCondition = rb.readInt();
+                    s.lastKnownMapping = rb.readIntArray(rb.readInt());
+
+                    s.originalEncoding = "EUC-KR";
+
+                    s.originalStrings = rb.readStringArray(s.originalEncoding);
+                }
+
+
 
                 // New ver
                 try {
                     s.repack = rb.readBool();
                 } catch (Exception) {
                 }
-
+                return s;
             } catch (Exception) {
                 return null;
             }
-            return s;
+        }
+
+        public static Settings loadFromFile(String fileName) {
+            try {
+                byte[] bytes = File.ReadAllBytes(fileName);
+                Settings s = loadVersioned(bytes, fileName);
+                for (int i = 0; i < s.encodings.Length; i++) {
+                    s.encodings[i] = Settings.defaultEncoding;
+                }
+                s.originalEncoding = Settings.defaultEncoding;
+                return s;
+            } catch (Exception) {
+                return null;
+            }
         }
 
         public bool saveToFile(String file) {
             try {
                 WriteBuffer wb = new WriteBuffer();
-                wb.writeString(this.inpuPath);
-                wb.writeString(this.outputPath);
+                wb.writeString("version", defaultEncoding);
+                wb.writeInt(1);
 
-                wb.writeArray(this.langauges);
-                wb.writeArrayArray(this.strings);
+                wb.writeString(this.inpuPath, defaultEncoding);
+                wb.writeString(this.outputPath, defaultEncoding);
+
+                wb.writeArray(this.langauges, defaultEncoding);
+                wb.writeArray(this.encodings, defaultEncoding);
+
+                wb.writeArrayArray(this.strings, this.encodings);
 
                 wb.writeInt(this.useCondition);
 
                 wb.writeInt(this.lastKnownMapping.Length);
                 wb.writeArray(this.lastKnownMapping);
-                wb.writeArray(this.originalStrings);
+
+                wb.writeString(this.originalEncoding, defaultEncoding);
+                wb.writeArray(this.originalStrings, this.originalEncoding);
 
                 wb.writeBool(this.repack);
 

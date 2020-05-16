@@ -843,7 +843,7 @@ namespace WpfApplication1 {
                     }
                     return false;
                 }
-                MapString[] us = TheLib.getStrings(set.inpuPath);
+                MapString[] us = TheLib.getStrings(set.inpuPath, set.originalEncoding);
                 if (us == null) {
                     if (errorOnFail) {
                         showErrorMessageBox(RelLanguage.WinMapErr, RelLanguage.ErrUnsupportedMap);
@@ -1064,6 +1064,7 @@ namespace WpfApplication1 {
 
         private void createNewLangaugeCB(String languageName, String copyOf) {
             Settings settings = getSettings();
+            String newEncoding = Settings.defaultEncoding;
 
             // Check langauge unuqie
             for (int i = 0; i < settings.langauges.Length; i++) {
@@ -1084,6 +1085,7 @@ namespace WpfApplication1 {
                     for (int a = 0; a < translationData.Length; a++) {
                         translationData[a] = languageData[a];
                     }
+                    newEncoding = settings.encodings[i];
                     break;
                 }
             }
@@ -1103,11 +1105,15 @@ namespace WpfApplication1 {
             // Have translation data, store in settings and reload
             // Update languages array
             String[] newLanguages = new String[settings.langauges.Length + 1];
+            String[] newEncodings = new string[settings.encodings.Length + 1];
             for (int i = 0; i < settings.langauges.Length; i++) {
                 newLanguages[i] = settings.langauges[i];
+                newEncodings[i] = settings.encodings[i];
             }
             newLanguages[newLanguages.Length - 1] = languageName;
+            newEncodings[newEncodings.Length - 1] = newEncoding;
             settings.langauges = newLanguages;
+            settings.encodings = newEncodings;
 
             // Update string array
             String[][] newStrings = new String[settings.strings.Length + 1][];
@@ -1144,13 +1150,17 @@ namespace WpfApplication1 {
 
                         // First update language array
                         String[] newLanguages = new String[settings.langauges.Length - 1];
+                        String[] newEncodings = new String[settings.encodings.Length - 1];
                         for (int o = 0; o < i; o++) {
                             newLanguages[o] = settings.langauges[o];
+                            newEncodings[o] = settings.encodings[o];
                         }
                         for (int o = i + 1; o < settings.langauges.Length; o++) {
                             newLanguages[o - 1] = settings.langauges[o];
+                            newEncodings[o - 1] = settings.encodings[o];
                         }
                         settings.langauges = newLanguages;
+                        settings.encodings = newEncodings;
 
                         // Update string array
                         String[][] newStrings = new String[settings.strings.Length - 1][];

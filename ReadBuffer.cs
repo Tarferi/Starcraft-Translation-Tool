@@ -33,10 +33,10 @@ namespace WpfApplication1 {
 
         private SimpleMemoryStream me;
 
-        private int DataLeft { get { return (int)(me.Length - me.Position); } }
+        private int DataLeft { get { return (int) (me.Length - me.Position); } }
 
         public int readByte() {
-            if(DataLeft == 0) {
+            if (DataLeft == 0) {
                 throw new OutOfBoundsReadException();
             }
             return me.ReadByte();
@@ -55,15 +55,15 @@ namespace WpfApplication1 {
         }
 
         public long readLong() {
-            return (((long)readInt()) << 32) | (((long)readInt()) << 0);
+            return (((long) readInt()) << 32) | (((long) readInt()) << 0);
         }
 
-        public String[][] readStringArrayArray() {
+        public String[][] readStringArrayArray(String[] encodings) {
             List<String[]> lst = new List<String[]>();
             int length = readInt();
             for (int i = 0; i < length; i++) {
-                lst.Add(readStringArray());
-                if(DataLeft == 0) {
+                lst.Add(readStringArray(encodings[i]));
+                if (DataLeft == 0) {
                     length = i + 1;
                 }
             }
@@ -74,11 +74,11 @@ namespace WpfApplication1 {
             return strs;
         }
 
-        public String[] readStringArray() {
+        public String[] readStringArray(String encoding) {
             List<String> lst = new List<String>();
             int length = readInt();
             for (int i = 0; i < length; i++) {
-                lst.Add(readString());
+                lst.Add(readString(encoding));
                 if (DataLeft == 0) {
                     length = i + 1;
                 }
@@ -90,16 +90,20 @@ namespace WpfApplication1 {
             return strs;
         }
 
-        public String readString() {
+        public byte[] readByteArray() {
             int length = readInt();
             if (length > DataLeft) {
                 length = DataLeft;
             }
             byte[] bytes = new byte[length];
             for (int i = 0; i < length; i++) {
-                bytes[i] = (byte)readByte();
+                bytes[i] = (byte) readByte();
             }
-            String str = Encoding.GetEncoding("EUC-KR").GetString(bytes);
+            return bytes;
+        }
+
+        public String readString(String encoding) {
+            String str = Encoding.GetEncoding(encoding).GetString(readByteArray());
             return str;
         }
 
@@ -109,7 +113,7 @@ namespace WpfApplication1 {
 
         public ReadBuffer(char[] data) {
             byte[] bData = new byte[data.Length];
-            for(int i = 0; i < data.Length; i++) {
+            for (int i = 0; i < data.Length; i++) {
                 bData[i] = (byte) data[i];
             }
             this.me = new SimpleMemoryStream(bData);
@@ -118,7 +122,7 @@ namespace WpfApplication1 {
         public byte[] readByteArray(int length) {
             byte[] data = new byte[length];
             for (int i = 0; i < length; i++) {
-                data[i] = (byte)readByte();
+                data[i] = (byte) readByte();
             }
             return data;
         }
@@ -126,7 +130,7 @@ namespace WpfApplication1 {
         public short[] readShortArray(int length) {
             short[] data = new short[length];
             for (int i = 0; i < length; i++) {
-                data[i] = (short)readShort();
+                data[i] = (short) readShort();
             }
             return data;
         }
@@ -134,7 +138,7 @@ namespace WpfApplication1 {
         public int[] readIntArray(int length) {
             int[] data = new int[length];
             for (int i = 0; i < length; i++) {
-                data[i] = (int)readInt();
+                data[i] = (int) readInt();
             }
             return data;
         }

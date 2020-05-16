@@ -115,7 +115,7 @@ namespace WpfApplication1 {
 #if USE_MEMORY_MODULE
                 byte[] data = TranslatorUI.Properties.Resources.TranslateLib;
                 mem = new MemoryModule(data);
-                _Process = (ProcessFunc)mem.GetDelegateFromFuncName(0, typeof(ProcessFunc));
+                _Process = (ProcessFunc) mem.GetDelegateFromFuncName(0, typeof(ProcessFunc));
 #else
                 IntPtr pDll = LoadLibrary("C:\\Users\\Tom\\Desktop\\Documents\\Visual Studio 2015\\Projects\\TranslateLib\\Debug\\TranslateLib.dll");
                 IntPtr pAddressOfFunctionToCall0 = GetProcAddress(pDll, (IntPtr) 1);
@@ -130,12 +130,12 @@ namespace WpfApplication1 {
 #endif
         private static ProcessFunc _Process = null; // DLL Method
 
-        private static unsafe byte* toByteArray(String strStr) {
-            return toByteArray(strStr, null);
+        private static unsafe byte* toByteArray(String strStr, String encoding) {
+            return toByteArray(strStr, null, encoding);
         }
 
-        private static unsafe byte* toByteArray(String strStr, int* outLength) {
-            byte[] str = Encoding.GetEncoding("EUC-KR").GetBytes(strStr);
+        private static unsafe byte* toByteArray(String strStr, int* outLength, String encoding) {
+            byte[] str = Encoding.GetEncoding(encoding).GetBytes(strStr);
             if (str == null) {
                 return (byte*) 0;
             }
@@ -166,14 +166,14 @@ namespace WpfApplication1 {
             return bytes;
         }
 
-        private static unsafe byte* toByteArray(int[] data, String[] strArr, int* outLength) {
+        private static unsafe byte* toByteArray(int[] data, String[] strArr, int* outLength, String encoding) {
             int dataSize = 4; // Size of array
             byte*[] strPtrs = new byte*[strArr.Length];
             int[] strPtrsLengths = new int[strArr.Length];
 
             for (int i = 0; i < strArr.Length; i++) {
                 int len = 0; // Total length of encoded data, without null delimiter
-                byte* strR = toByteArray(strArr[i], &len);
+                byte* strR = toByteArray(strArr[i], &len, encoding);
                 strPtrs[i] = strR;
                 strPtrsLengths[i] = len;
                 dataSize += len + 4 + 4; // Size of string, ID of string and length of length
@@ -214,7 +214,7 @@ namespace WpfApplication1 {
             TranslationStructure es = new TranslationStructure();
             es.action = (byte) 4;
 
-            es.inputFilePath = toByteArray(settings.inpuPath);
+            es.inputFilePath = toByteArray(settings.inpuPath, Settings.defaultEncoding);
 
             es.useCondition = settings.useCondition;
 
@@ -233,7 +233,7 @@ namespace WpfApplication1 {
             TranslationStructure es = new TranslationStructure();
             es.action = (byte) 5;
 
-            es.inputFilePath = toByteArray(settings.inpuPath);
+            es.inputFilePath = toByteArray(settings.inpuPath, Settings.defaultEncoding);
 
             es.useCondition = settings.useCondition;
 
@@ -252,14 +252,14 @@ namespace WpfApplication1 {
             TranslationStructure es = new TranslationStructure();
             es.action = (byte) 1;
 
-            es.inputFilePath = toByteArray(settings.inpuPath);
-            es.outputFilePath = toByteArray(settings.outputPath);
+            es.inputFilePath = toByteArray(settings.inpuPath, Settings.defaultEncoding);
+            es.outputFilePath = toByteArray(settings.outputPath, Settings.defaultEncoding);
 
             es.useCondition = settings.useCondition;
             es.repack = (byte) (settings.repack ? 1 : 0);
 
             int len = 0;
-            es.stringData = toByteArray(settings.lastKnownMapping, settings.strings[languageIndex], &len);
+            es.stringData = toByteArray(settings.lastKnownMapping, settings.strings[languageIndex], &len, settings.encodings[languageIndex]);
             es.stringDataLength = len;
 
             run(&es);
@@ -274,12 +274,12 @@ namespace WpfApplication1 {
             return es.result == 0;
         }
 
-        private static MapString readMapString(UnsafeReadBuffer rb) {
+        private static MapString readMapString(UnsafeReadBuffer rb, String encoding) {
             MapString ms = new MapString();
 
             ms.mapIndex = rb.readInt();
 
-            ms.str = rb.readString();
+            ms.str = rb.readString(encoding);
             ms.isMapDescription = rb.readByte() == 1 ? true : false;
             ms.isMapName = rb.readByte() == 1 ? true : false;
 
@@ -295,11 +295,11 @@ namespace WpfApplication1 {
             return ms;
         }
 
-        public static unsafe MapString[] getStrings(String filePath) {
+        public static unsafe MapString[] getStrings(String filePath, String encoding) {
             TranslationStructure es = new TranslationStructure();
             es.action = (byte) 2;
             es.outputFilePath = (byte*) 0;
-            es.inputFilePath = toByteArray(filePath);
+            es.inputFilePath = toByteArray(filePath, Settings.defaultEncoding);
             try {
                 run(&es); // Run extraction
 
@@ -309,7 +309,7 @@ namespace WpfApplication1 {
                 int totalStrings = rb.readInt();
                 MapString[] result = new MapString[totalStrings];
                 for (int i = 0; i < totalStrings; i++) {
-                    result[i] = readMapString(rb);
+                    result[i] = readMapString(rb, encoding);
                 }
 
                 // Sort by index

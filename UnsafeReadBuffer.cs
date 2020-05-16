@@ -10,7 +10,7 @@ namespace WpfApplication1 {
         public int readByte() {
             byte value = data[position];
             position++;
-            return (int) (value&0xff);
+            return (int) (value & 0xff);
         }
 
         public bool readBool() {
@@ -25,13 +25,13 @@ namespace WpfApplication1 {
             return (readShort() << 0) | (readShort() << 16);
         }
 
-        public String readString() {
+        public String readString(String encoding) {
             int length = readInt();
             byte[] bytes = new byte[length];
             for (int i = 0; i < length; i++) {
                 bytes[i] = (byte) readByte();
             }
-            String str = Encoding.GetEncoding("EUC-KR").GetString(bytes);
+            String str = Encoding.GetEncoding(encoding).GetString(bytes);
             return str;
         }
 
@@ -43,7 +43,7 @@ namespace WpfApplication1 {
         public byte[] readByteArray(int length) {
             byte[] data = new byte[length];
             for (int i = 0; i < length; i++) {
-                data[i] = (byte)readByte();
+                data[i] = (byte) readByte();
             }
             return data;
         }
@@ -51,7 +51,7 @@ namespace WpfApplication1 {
         public short[] readShortArray(int length) {
             short[] data = new short[length];
             for (int i = 0; i < length; i++) {
-                data[i] = (short)readShort();
+                data[i] = (short) readShort();
             }
             return data;
         }
@@ -59,13 +59,13 @@ namespace WpfApplication1 {
         public int[] readIntArray(int length) {
             int[] data = new int[length];
             for (int i = 0; i < length; i++) {
-                data[i] = (int)readInt();
+                data[i] = (int) readInt();
             }
             return data;
         }
 
         public byte* readBytePtr() {
-            return (byte*)readInt();
+            return (byte*) readInt();
         }
     }
 }
