@@ -69,7 +69,7 @@ namespace WpfApplication1 {
                     s.langauges = rb.readStringArray(encoding);
                     s.encodings = new string[s.langauges.Length];
                     for (int i = 0; i < s.encodings.Length; i++) {
-                        s.encodings[i] = "EUC-KR";
+                        s.encodings[i] = encoding;
                     }
 
                     s.strings = rb.readStringArrayArray(s.encodings);
@@ -77,7 +77,7 @@ namespace WpfApplication1 {
                     s.useCondition = rb.readInt();
                     s.lastKnownMapping = rb.readIntArray(rb.readInt());
 
-                    s.originalEncoding = "EUC-KR";
+                    s.originalEncoding = encoding;
 
                     s.originalStrings = rb.readStringArray(s.originalEncoding);
                 }
@@ -148,9 +148,11 @@ namespace WpfApplication1 {
             s.outputPath = "";
             s.langauges = new String[0];
             s.strings = new String[0][];
+            s.originalEncoding = Settings.defaultEncoding;
             s.useCondition = 0;
             s.lastKnownMapping = new int[0];
             s.originalStrings = new String[0];
+            s.encodings = new string[0];
             return s;
         }
     }

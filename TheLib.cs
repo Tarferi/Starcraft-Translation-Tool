@@ -1,6 +1,6 @@
 ﻿#if !DEBUG
-#define USE_MEMORY_MODULE
 #endif
+#define USE_MEMORY_MODULE
 
 using QChkUI;
 using System;
