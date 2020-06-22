@@ -1406,16 +1406,22 @@ namespace WpfApplication1 {
                         notColorizer(worksheet.Cells[cell(3, 2 + i)], origin, str.description);
                         cellSetter(worksheet.Cells[cell(4, 2 + i)], origin, str.translations[languageID]);
 
+                        try {
+                            worksheet.Cells[cell(1, 2 + i)].AutoFitColumns();
+                            worksheet.Cells[cell(2, 2 + i)].AutoFitColumns();
+                            worksheet.Cells[cell(3, 2 + i)].AutoFitColumns();
+                            worksheet.Cells[cell(4, 2 + i)].AutoFitColumns();
+                        } catch (Exception) { // Welp...
 
-                        worksheet.Cells[cell(1, 2 + i)].AutoFitColumns();
-                        worksheet.Cells[cell(2, 2 + i)].AutoFitColumns();
-                        worksheet.Cells[cell(3, 2 + i)].AutoFitColumns();
-                        worksheet.Cells[cell(4, 2 + i)].AutoFitColumns();
-
+                        }
                     }
 
                     worksheet.Calculate();
-                    worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
+                    try {
+                        worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
+                    } catch (Exception) { // Welp...
+
+                    }
 
                     double w1 = worksheet.Column(1).Width;
                     double w2 = worksheet.Column(2).Width;
@@ -1451,7 +1457,7 @@ namespace WpfApplication1 {
 
                     MessageBox.Show(RelLanguage.LblExportFinish, RelLanguage.WinExport, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
                 showErrorMessageBox(RelLanguage.WinExport, RelLanguage.ErrorExportFailed);
             }
         }
