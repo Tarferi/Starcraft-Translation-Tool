@@ -1,5 +1,5 @@
 # Starcraft Map Translator
-Original topic: [here](https://www.staredit.net/topic/17892)
+Original topic: [here](http://www.staredit.net/topic/17892/)
 
 ![Screenshot](http://rion.cz/epd/smt/scr1.png "Screenshot")
 
