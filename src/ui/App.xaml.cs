@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Threading;
 using TranslatorData;
 
@@ -23,7 +25,7 @@ namespace TranslatorUI {
         
 #if !DEBUG
         Assembly ResolveResources(object sender, ResolveEventArgs args) {
-            string dllName = args.Name.Contains(',') ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name.Replace(".dll", "");
+            string dllName = args.Name.Contains(",") ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name.Replace(".dll", "");
             if (dllName == "EPPlus") {
                 return Assembly.Load(TranslatorUI.Properties.Resources.EPPlus);
             } else {
