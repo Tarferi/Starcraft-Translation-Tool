@@ -19,7 +19,7 @@ namespace TranslatorUI.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -102,36 +102,6 @@ namespace TranslatorUI.Properties {
             get {
                 object obj = ResourceManager.GetObject("EPPlus", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CurrentLanguage=русский
-        ///WinTitle=Starcraft карта переводчик
-        ///WinControl=контроль
-        ///WinTranslation=перевод
-        ///WinFilters=Filtres
-        ///WinProcess=процесс
-        ///WinAddTranslation=Добавить перевод
-        ///WinDeleteTranslation=Удалить перевод
-        ///WinConfirmDeletion=Подтвердите удаление
-        ///	
-        ///BtnBrowse=пролистать
-        ///BtnLoad=нагрузка
-        ///BtnUnload=разгружать
-        ///BtnSave=Сохранить
-        ///BtnClose=близко
-        ///BtnAddTranslation=Добавить перевод
-        ///BtnRemoveTranslation=Удалить перевод
-        ///BtnRun=пробег
-        ///BtnCheck=Проверить
-        ///BtnOpen=открытый
-        ///BtnCreate=создать
-        ///Btn [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string lng_ru {
-            get {
-                return ResourceManager.GetString("lng_ru", resourceCulture);
             }
         }
         

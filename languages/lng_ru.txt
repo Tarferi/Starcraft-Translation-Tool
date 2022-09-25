@@ -1,0 +1,161 @@
+﻿CurrentLanguage=русский
+WinTitle=Starcraft карта переводчик
+WinControl=контроль
+WinTranslation=перевод
+WinFilters=Filtres
+WinProcess=процесс
+WinAddTranslation=Добавить перевод
+WinDeleteTranslation=Удалить перевод
+WinConfirmDeletion=Подтвердите удаление
+	
+BtnBrowse=пролистать
+BtnLoad=нагрузка
+BtnUnload=разгружать
+BtnSave=Сохранить
+BtnClose=близко
+BtnAddTranslation=Добавить перевод
+BtnRemoveTranslation=Удалить перевод
+BtnRun=пробег
+BtnCheck=Проверить
+BtnOpen=открытый
+BtnCreate=создать
+BtnDelete=удалять
+	
+FilterShowMapDetails=Показать детали карты
+FilterShowTriggerText=Показать текст триггера
+FilterShowTriggerComments=Показать комментарии триггера
+FilterShowLocationNames=Показать названия мест
+FilterShowSwitchNames=Показать имена переключателей
+FilterShowUnitNames=Показать названия объектов
+	
+LblLanguage=Язык:
+LblLoadedSettings=Настройки ввода:
+LblLoadedMap=Загруженная карта:
+LblOutputMap=Выходная карта:
+LblGuard=охрана
+LblGuardSwitch=переключатель
+LblGuardDeaths=Смертей
+LblDefaultValues=Значения по умолчанию:
+LblDefault=<По умолчанию>
+LblConfirmDeletion=Вы уверены, что хотите удалить язык "{0}"?
+	
+TableUsage=использование
+TableOriginal=оригинал
+	
+ErrMissingStrings=Строки {0} не найдены в сохраненном сеансе! \ R \ nЭти строки будут иметь значения по умолчанию в таблицах перевода.
+ErrMissingMapStrings=Строка (ы) {0} не найдены в карте! \ R \ nТакие строки будут удалены из файла сеанса, включая все переводы!
+ErrRemapNeeded={0} строка (и) были смещены! \ R \ nИндексы будут исправлены.
+ErrConfirmTranslationUpdate=Нажмите OK, чтобы подтвердить изменения или Отмена, чтобы выгрузить карту.
+WinMapErr=Ошибка карты
+ErrUnsupportedMap=Данная карта не поддерживается
+ErrNoOutputMap=Пожалуйста, укажите выходную карту.
+ErrMapFailedToLoad=Не удалось загрузить данную карту.
+	
+WinLoadSettings=Настройки Загрузить
+LblNewSettingsCreate=Хотите создать новый файл в указанном месте? \ N (это может перезаписать файл, если он уже существует)
+WinSaveSettings=Настройки Сохранить
+ErrFailedToCreateSettings=Не удалось создать файл настроек
+LblSettingsSaved=Настройки сохранены
+ErrFailedToCreateTranslation=Не удалось создать новый перевод.
+ErrFailedToCreateTranslationLanguageExists=Не удалось создать новый перевод. Уже есть такой язык.
+	
+ErrTranslationFailed=Перевод не удался
+ErrInvalidTargetLanguage=Выбран неверный целевой язык
+LblTranslationDone=Перевод выполнен
+ErrGuardCannotBeUsed=Данный охранник не может быть использован
+LblGuardCanBeUsed=Данный охранник может быть использован
+	
+# List pseudoheader	
+LblUnitNames=Названия юнитов:
+LblSwitchNames=Переключить имена:
+LblLocationNames=Название места:
+LblInvalidIndex=Неверный индекс: {0}
+	
+LblTriggerTexts=Триггеры:
+LblTriggerComments=Комментарии:
+LblBriefings=Брифинги:
+LblBriefingComments=Брифинг Комментарии:
+LblForceNames=Силовые имена:
+	
+#List elements	
+LblUnitName=Блок {0}
+LblSwitchName=Switch {0}
+LblTrigger=Триггер {0}
+LblLocation=Расположение {0}
+LblTriggerComment=Комментарий {0}
+LblBriefingTrigger=Триггер брифинга {0}
+LblForceName=Force {0}
+LblMapName=Название карты
+LblMapDescription=Описание карты
+LblAnywhere=где-нибудь
+LblPlayer=Игрок {0}
+	
+WinOpenSettingsDialogTitle=Открыть файл настроек перевода
+FormatName=Файл перевода карты Starcraft
+	
+WinOpenMapDialogTitle=Открыть файл карты Starcraft
+WinSaveMapDialogTitle=Сохранить файл карты Starcraft
+BwMapName=Starcraft Brood War Map
+ScMapName=Карта старкрафта
+ScMapFile=Файл карты Starcraft
+	
+	
+menuMainMenu=_Главная
+menuExit=_Exit
+menuLanguage=_Language
+menuEnglish=_English
+menuKorean=_Korean
+menuHelp=_Help
+menuForum=_Forum
+menuUpdate=_update
+menuAbout=_О
+	
+WinUpdateTitle=обновление
+BtnUpdate=обновление
+BtnRestart=перезапуск
+LblCurrentVersion=Текущая версия:
+LblRemoteVersion=Последняя версия:
+LblUpdateProgress=Обновление прогресса:
+ErrorUpdateGetRemoteVersion=Не удалось определить удаленную версию.
+ErrorFailedToDownloadUpdate=Не удалось загрузить обновление.
+ErrorUpdateInvalidDownload=Не удалось загрузить удаленную версию.
+ErrorFailedToRunUpdator=Не удалось запустить обновление
+	
+WinAbout=о
+LblCreator=Сделано:
+LblVersion=Версия:
+LblProduct=Инструмент перевода карт Starcraft
+LblAutoUpdate=Разрешить автоматическую проверку обновлений
+	
+BtnExportTranslation=Экспорт Перевод
+BtnImportTranslation=Импортировать перевод
+	
+WinExport=Экспорт Перевод
+WinImport=Импортировать перевод
+BtnExport=экспорт
+ExcelFile=Электронная таблица Microsoft Office Excel
+ErrorExportFailed=Экспорт не выполнен.
+LblExportFinish=Экспорт завершен.
+BtnImport=импорт
+LblConfirmOverWrite=Язык {0} уже существует. Переписать?
+	
+ErrorImportFailed=Не удалось импортировать
+ErrorInvalidImportData=Не удалось импортировать Неверные данные импорта.
+LblImportFinished=Импорт завершен.
+	
+WinError=Обработчик сбоев
+LblErrorUncaughtException=Uncaught исключения:
+LblErrorCrash=Приложение не может продолжаться.
+BtnExit=выход
+LblErrorCallstackDetails=Подробнее:
+LblEscapeColors=Используйте цветовые коды
+LblEscapeNewlines=Escape Line Breaks
+	
+ResColorErr=Не удалось загрузить цвета Starcraft. Пожалуйста, обновите.
+ResColorErrTitle=Внутренняя Ошибка
+	
+LblImportErHeaders=Заголовки отсутствуют или повреждены
+LblOriginalDataCorrupted=Исходные данные повреждены
+LblStringCorruption=Ожидается "{0}", получено "{1}"
+LblNoDetailsAvailable=Нет доступных данных.
+LblImportErrDetails=Подробнее:

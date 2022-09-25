@@ -1,0 +1,9 @@
+﻿<Application x:Class="TranslatorUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TranslatorUI"
+             StartupUri="src/ui/MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

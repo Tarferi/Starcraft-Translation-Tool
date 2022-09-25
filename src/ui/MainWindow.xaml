@@ -1,0 +1,143 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TranslatorUI"
+        xmlns:p = "clr-namespace:TranslatorUI"   
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="TranslatorUI.MainWindow"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        mc:Ignorable="d"
+        Title="{Binding RelLanguage.WinTitle, Mode=OneWay, FallbackValue=[Title]}" Height="706.475" Width="728.263">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="0">
+        <GroupBox Margin="10,30,10,0" Height="163" VerticalAlignment="Top" Header="{Binding RelLanguage.WinControl, Mode=OneWay, FallbackValue=[Control]}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="filesControl" Margin="0" OpacityMask="#FF8B4F4F" VerticalAlignment="Top" SizeChanged="FilesControl_SizeChanged">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" x:Name="filesControlCol1"/>
+                        <ColumnDefinition x:Name="filesControlCol2"/>
+                        <ColumnDefinition x:Name="filesControlCol3" Width="Auto"/>
+                        <ColumnDefinition x:Name="filesControlCol4" Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblLoadedMap, Mode=OneWay, FallbackValue=[Input map:]}" FontSize="14" Grid.Row="1"/>
+                    <ComboBox x:Name="txtSet" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" Text="new_project.smt" IsEditable="True" Grid.Column="1"/>
+                    <Button x:Name="brwsBtnInMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnInMap_Click" Grid.Column="3" Grid.Row="1"/>
+                    <TextBlock HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblLoadedSettings, Mode=OneWay, FallbackValue=[Loaded settings:]}" VerticalAlignment="Center" FontSize="14"/>
+                    <ComboBox x:Name="txtInMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:Name="brwsBtnSettings" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSettings_Click" Grid.Column="3"/>
+                    <Button x:Name="brwsBtnSaveSettings" Content="{Binding RelLanguage.BtnOpen, Mode=OneWay, FallbackValue=[Open]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSaveSettings_Click" Grid.Column="2"/>
+                    <TextBlock HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblOutputMap, Mode=OneWay, FallbackValue=[Output map:]}" VerticalAlignment="Center" FontSize="14" Grid.Row="2"/>
+                    <ComboBox x:Name="txtOutMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="2"/>
+                    <Button x:Name="brwsBtnOutMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnOutMap_Click" Grid.Column="3" Grid.Row="2"/>
+                    <Button x:Name="btnOpenMap" Content="{Binding RelLanguage.BtnLoad, Mode=OneWay, FallbackValue=[Load]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="btnOpenMap_Click" Grid.Column="2" Grid.Row="1"/>
+                    <CheckBox x:Name="checkRepack" Content="{Binding RelLanguage.lblRepack, Mode=OneWay, FallbackValue=[Repack]}" Grid.Column="2" Margin="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+
+
+                </Grid>
+                <Grid x:Name="grdCheckCond" Margin="0" Grid.Row="1" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="udpW1" Width="{Binding ElementName=filesControlCol1, Path=ActualWidth}"/>
+                        <ColumnDefinition x:Name="udpW2" Width="{Binding ElementName=filesControlCol2, Path=ActualWidth}"/>
+                        <ColumnDefinition x:Name="udpW3" Width="{Binding ElementName=filesControlCol3, Path=ActualWidth}"/>
+                        <ColumnDefinition x:Name="udpW4" Width="{Binding ElementName=filesControlCol4, Path=ActualWidth}"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="0,0,0,1" TextWrapping="Wrap" Text="{Binding RelLanguage.LblGuard, Mode=OneWay, FallbackValue=[Guard:]}" VerticalAlignment="Center" FontSize="14" HorizontalAlignment="Right"/>
+                    <Grid Grid.Column="1" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton x:Name="rdSwitches" Content="{Binding RelLanguage.LblGuardSwitch, Mode=OneWay, FallbackValue=[Switch:]}" HorizontalAlignment="Left" Margin="5,0" VerticalAlignment="Center" RenderTransformOrigin="0.447,0.267" IsChecked="True"/>
+                        <RadioButton x:Name="rdDeaths" Content="{Binding RelLanguage.LblGuardDeaths, Mode=OneWay, FallbackValue=[Deaths:]}" HorizontalAlignment="Left" Margin="0,0,5,0" VerticalAlignment="Center" Grid.Column="1" IsChecked="True"/>
+                        <ComboBox x:Name="cmbSwitches" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rdSwitches}" Margin="0,0,5,0" VerticalAlignment="Center" Height="25" Grid.Column="3" Grid.ColumnSpan="2"/>
+                        <ComboBox SelectedIndex="0" x:Name="cmbDeathsP" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rdDeaths}" Margin="0,0,5,0" VerticalAlignment="Center" Grid.Column="3" Width="150" Height="25" />
+                        <ComboBox SelectedIndex="0" x:Name="cmbDeathsU" Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=rdDeaths}" Margin="0,0,5,0" VerticalAlignment="Center" Grid.Column="4" Height="25" />
+                    </Grid>
+                    <Button x:Name="btnCheckCond" Content="{Binding RelLanguage.BtnCheck, Mode=OneWay, FallbackValue=[Check]}" Margin="0" VerticalAlignment="Center" FontSize="14" Click="btnCheckCond_Click" Grid.Column="3" HorizontalAlignment="Right" Width="80" Height="25"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+
+        <GroupBox Margin="10,198,10,156" Grid.ColumnSpan="2" Header="{Binding RelLanguage.WinTranslation, Mode=OneWay, FallbackValue=[Translation]}">
+            <DataGrid ScrollViewer.CanContentScroll="False" x:Name="tblTrans" CanUserAddRows="False" PreviewKeyDown="tblTrans_PreviewKeyDown"/>
+        </GroupBox>
+
+        <GroupBox Margin="0,0,10,61" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Height="90" HorizontalAlignment="Right" Width="282" Header="{Binding RelLanguage.WinControl, Mode=OneWay, FallbackValue=[Control]}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Button x:Name="btnAddTranslation" Content="{Binding RelLanguage.BtnAddTranslation, Mode=OneWay, FallbackValue=[AddTranslation]}" Margin="10,7,10,3" Click="button1_Click" />
+                <Button x:Name="btnDeleteTranslation" Content="{Binding RelLanguage.BtnRemoveTranslation, Mode=OneWay, FallbackValue=[RemoveTranslation]}" Margin="10,5" Click="btnDeleteTranslation_Click" Grid.Row="1"/>
+                <Button x:Name="btnExportTranslation" Content="{Binding RelLanguage.BtnExportTranslation, FallbackValue=[ExportTranslation], Mode=OneWay}" Margin="5,7,10,3" Grid.Column="1" Click="btnExportTranslation_Click"/>
+                <Button x:Name="btnImportTranslation" Content="{Binding RelLanguage.BtnImportTranslation, FallbackValue=[ImportTranslation], Mode=OneWay}" Margin="5,5,10,5" Grid.Column="1" Grid.Row="1" Click="btnImportTranslation_Click"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Margin="10,0,297,61" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Height="90" Header="{Binding RelLanguage.WinFilters, Mode=OneWay, FallbackValue=[Filters]}">
+            <Grid>
+                <CheckBox x:Name="checkMapDetails" Content="{Binding RelLanguage.FilterShowMapDetails, Mode=OneWay, FallbackValue=[ShowMapDetails]}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="checkMapDetails_Checked" Unchecked="checkMapDetails_Checked" IsChecked="True"/>
+                <CheckBox x:Name="checkDisplayMessages" Content="{Binding RelLanguage.FilterShowTriggerText, Mode=OneWay, FallbackValue=[ShowTriggerText]}" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Checked="checkDisplayMessages_Checked" Unchecked="checkDisplayMessages_Checked" IsChecked="True"/>
+                <CheckBox x:Name="checkComments" Content="{Binding RelLanguage.FilterShowTriggerComments, Mode=OneWay, FallbackValue=[ShowTriggerComments]}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Checked="checkComments_Checked" Unchecked="checkComments_Checked" IsChecked="True"/>
+                <CheckBox x:Name="checkLocations" Content="{Binding RelLanguage.FilterShowLocationNames, Mode=OneWay, FallbackValue=[ShowLocationNames]}" HorizontalAlignment="Left" Margin="248,5,0,0" VerticalAlignment="Top" Checked="checkLocations_Checked" Unchecked="checkLocations_Checked" IsChecked="True"/>
+                <CheckBox x:Name="checkSwitches" Content="{Binding RelLanguage.FilterShowSwitchNames, Mode=OneWay, FallbackValue=[ShowSwitchNames]}" HorizontalAlignment="Left" Margin="248,25,0,0" VerticalAlignment="Top" Checked="checkSwitches_Checked" Unchecked="checkSwitches_Checked" IsChecked="True"/>
+                <CheckBox x:Name="checkUnitNames" Content="{Binding RelLanguage.FilterShowUnitNames, Mode=OneWay, FallbackValue=[ShowUnitNames]}" HorizontalAlignment="Left" Margin="248,45,0,0" VerticalAlignment="Top" Checked="checkUnitNames_Checked" Unchecked="checkUnitNames_Checked" IsChecked="True"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Margin="10,0,10,10" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Height="46" Header="{Binding RelLanguage.WinProcess, Mode=OneWay, FallbackValue=[Process]}">
+            <Grid>
+                <Button x:Name="btnRun" Content="{Binding RelLanguage.BtnRun, Mode=OneWay, FallbackValue=[Run]}" HorizontalAlignment="Right" Width="75" Margin="0,0,0,2" Click="btnRun_Click"/>
+                <ComboBox x:Name="comboRunLanguage" HorizontalAlignment="Right" Margin="0,0,80,0" VerticalAlignment="Top" Width="134"/>
+                <TextBlock x:Name="label" Text="{Binding RelLanguage.LblLanguage, Mode=OneWay, FallbackValue=[Language]}" HorizontalAlignment="Right" Margin="0,3,218,0" VerticalAlignment="Top" Height="18" RenderTransformOrigin="0.704,0.778"/>
+                <ProgressBar Visibility="Collapsed" x:Name="progress" HorizontalAlignment="Left" Height="18" Margin="0,3,0,0" VerticalAlignment="Top" Width="411" IsIndeterminate="True"/>
+            </Grid>
+        </GroupBox>
+        <Grid Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="720">
+            <Menu x:Name="menu" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="720" Background="{x:Null}">
+                <MenuItem Header="{Binding RelLanguage.menuMainMenu, Mode=OneWay, FallbackValue=[_Main]}">
+                    <MenuItem Header="{Binding RelLanguage.menuExit, Mode=OneWay, FallbackValue=[_Exit]}" Click="MenuItem_Click_3" />
+                </MenuItem>
+                <MenuItem x:Name="menuLng" Header="{Binding RelLanguage.menuLanguage, FallbackValue=[_Language], Mode=OneWay}">
+
+                </MenuItem>
+                <MenuItem Header="{Binding RelLanguage.menuHelp, Mode=OneWay, FallbackValue=[_Help]}">
+                    <MenuItem Header="{Binding RelLanguage.menuForum, Mode=OneWay, FallbackValue=[_Forum]}" Click="MenuItem_Click" />
+                    <MenuItem Header="{Binding RelLanguage.menuUpdate, Mode=OneWay, FallbackValue=[_Update]}" Click="MenuItem_Click_1" />
+                    <Separator/>
+                    <MenuItem Header="{Binding RelLanguage.menuAbout, Mode=OneWay, FallbackValue=[_about]}" Click="MenuItem_Click_2" />
+                </MenuItem>
+            </Menu>
+        </Grid>
+
+    </Grid>
+</Window>

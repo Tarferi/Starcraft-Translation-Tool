@@ -14,6 +14,21 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,7 +52,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TranslatorUI.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
@@ -64,91 +82,91 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="src\ui\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="src\ui\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationErrorWindow.xaml.cs">
+    <Compile Include="src\ui\ApplicationErrorWindow.xaml.cs">
       <DependentUpon>ApplicationErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AsyncWorker.cs" />
-    <Compile Include="DeleteTranslationDialog.xaml.cs">
+    <Compile Include="src\internal\AsyncWorker.cs" />
+    <Compile Include="src\ui\DeleteTranslationDialog.xaml.cs">
       <DependentUpon>DeleteTranslationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddTranslationDialog.xaml.cs">
+    <Compile Include="src\ui\AddTranslationDialog.xaml.cs">
       <DependentUpon>AddTranslationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExportWindow.xaml.cs">
+    <Compile Include="src\ui\ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="History.cs" />
-    <Compile Include="ImportWindow.xaml.cs">
+    <Compile Include="src\data\History.cs" />
+    <Compile Include="src\ui\ImportWindow.xaml.cs">
       <DependentUpon>ImportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LocaleFile.cs" />
-    <Compile Include="ReadBuffer.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="StarcraftColors.cs" />
-    <Compile Include="TheLib.cs" />
-    <Compile Include="UnsafeReadBuffer.cs" />
-    <Compile Include="UnsafeWriteBuffer.cs" />
-    <Compile Include="UpdateWindow.xaml.cs">
+    <Compile Include="src\internal\LocaleFile.cs" />
+    <Compile Include="src\internal\ReadBuffer.cs" />
+    <Compile Include="src\data\Settings.cs" />
+    <Compile Include="src\data\StarcraftColors.cs" />
+    <Compile Include="src\internal\TheLib.cs" />
+    <Compile Include="src\internal\UnsafeReadBuffer.cs" />
+    <Compile Include="src\internal\UnsafeWriteBuffer.cs" />
+    <Compile Include="src\ui\UpdateWindow.xaml.cs">
       <DependentUpon>UpdateWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WriteBuffer.cs" />
-    <Page Include="AboutWindow.xaml">
+    <Compile Include="src\internal\WriteBuffer.cs" />
+    <Page Include="src\ui\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ApplicationErrorWindow.xaml">
+    <Page Include="src\ui\ApplicationErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DeleteTranslationDialog.xaml">
+    <Page Include="src\ui\DeleteTranslationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="AddTranslationDialog.xaml">
+    <Page Include="src\ui\AddTranslationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExportWindow.xaml">
+    <Page Include="src\ui\ExportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ImportWindow.xaml">
+    <Page Include="src\ui\ImportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="src\ui\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="src\ui\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="src\ui\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UpdateWindow.xaml">
+    <Page Include="src\ui\UpdateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mem.cs" />
+    <Compile Include="src\internal\Mem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -157,6 +175,7 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -170,10 +189,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="lng_en.txt" />
+    <EmbeddedResource Include="languages\lng_en.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="lng_ko.txt" />
+    <EmbeddedResource Include="languages\lng_ko.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\EPPlus.dll" />
@@ -182,20 +201,34 @@
     <EmbeddedResource Include="Resources\TranslateLib.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="colors.txt" />
+    <EmbeddedResource Include="Resources\colors.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="lng_ru.txt" />
+    <EmbeddedResource Include="languages\lng_ru.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
+    <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>del /S "$(SolutionDir)\Release\TranslatorUI.exe"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy /B /Y "$(SolutionDir)\$(ProjectName)\$(OutDir)\$(ProjectName).exe" "$(SolutionDir)\Release\$(ProjectName).exe</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
