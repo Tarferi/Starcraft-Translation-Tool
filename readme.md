@@ -21,5 +21,4 @@ It's still BETA and not thoroughly tested, so always have a backup of your maps 
 \
 **It*s not recommented to output to input map** (stuff breaks, translation corrupts and whatnot).
 \
-If you want to translate this tool to another language, translate [these strings](https://github.com/Tarferi/Starcraft-Translation-Tool/blob/master/lng_en.txt) (the parts after the equals sign)
-\
+If you want to translate this tool to another language, translate [these strings](https://github.com/Tarferi/Starcraft-Translation-Tool/blob/master/languages/lng_en.txt) (the parts after the equals sign)
