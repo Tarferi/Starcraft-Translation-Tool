@@ -1,5 +1,7 @@
 # Starcraft Map Translator
 Original topic: [here](http://www.staredit.net/topic/17892/)
+\
+Library sources: [here](https://github.com/Tarferi/Starcraft-Translator-Lib/)
 
 ![Screenshot](http://rion.cz/epd/smt/scr1.png "Screenshot")
 
