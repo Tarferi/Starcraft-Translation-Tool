@@ -73,6 +73,16 @@ namespace TranslatorUI {
                         return e;
                     }
                 }
+                try {
+                    Encoding enc = Encoding.GetEncoding(name);
+                    if (enc != null) {
+                        foreach (NamedEncoding e in EncodingList) {
+                            if (e.Encoding == enc) {
+                                return e;
+                            }
+                        }
+                    }
+                } catch (Exception) { }
                 throw new Exception("Unknown encoding: " + name);
             }
         }
