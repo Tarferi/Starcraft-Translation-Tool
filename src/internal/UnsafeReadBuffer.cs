@@ -25,13 +25,13 @@ namespace TranslatorData {
             return (readShort() << 0) | (readShort() << 16);
         }
 
-        public String readString(String encoding) {
+        public String readString(Encoding encoding) {
             int length = readInt();
             byte[] bytes = new byte[length];
             for (int i = 0; i < length; i++) {
                 bytes[i] = (byte) readByte();
             }
-            String str = Encoding.GetEncoding(encoding).GetString(bytes);
+            String str = encoding.GetString(bytes);
             return str;
         }
 

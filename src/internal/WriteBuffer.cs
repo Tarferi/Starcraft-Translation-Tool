@@ -38,20 +38,20 @@ namespace TranslatorData {
             }
         }
 
-        public void writeString(String value, String encoding) {
+        public void writeString(String value, Encoding encoding) {
             value = value == null ? "" : value;
-            byte[] str = Encoding.GetEncoding(encoding).GetBytes(value);
+            byte[] str = encoding.GetBytes(value);
             writeByteArray(str);
         }
 
-        public void writeArray(String[] ba, String encoding) {
+        public void writeArray(String[] ba, Encoding encoding) {
             writeInt(ba.Length);
             for (int i = 0; i < ba.Length; i++) {
                 writeString(ba[i], encoding);
             }
         }
 
-        public void writeArrayArray(String[][] ba, String[] encodings) {
+        public void writeArrayArray(String[][] ba, Encoding[] encodings) {
             writeInt(ba.Length);
             for (int i = 0; i < ba.Length; i++) {
                 writeArray(ba[i], encodings[i]);

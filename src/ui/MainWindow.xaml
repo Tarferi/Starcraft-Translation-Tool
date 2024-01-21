@@ -28,6 +28,7 @@
                         <ColumnDefinition x:Name="filesControlCol2"/>
                         <ColumnDefinition x:Name="filesControlCol3" Width="Auto"/>
                         <ColumnDefinition x:Name="filesControlCol4" Width="Auto"/>
+                        <ColumnDefinition x:Name="filesControlCol5" Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
@@ -35,21 +36,21 @@
                         <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblLoadedMap, Mode=OneWay, FallbackValue=[Input map:]}" FontSize="14" Grid.Row="1"/>
-                    <ComboBox x:Name="txtSet" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" Text="new_project.smt" IsEditable="True" Grid.Column="1"/>
-                    <Button x:Name="brwsBtnInMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnInMap_Click" Grid.Column="3" Grid.Row="1"/>
+                    <ComboBox x:Name="txtSet" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" Text="new_project.smt" IsEditable="True" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <Button x:Name="brwsBtnInMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnInMap_Click" Grid.Column="4" Grid.Row="1"/>
                     <TextBlock HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblLoadedSettings, Mode=OneWay, FallbackValue=[Loaded settings:]}" VerticalAlignment="Center" FontSize="14"/>
                     <ComboBox x:Name="txtInMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="1"/>
-                    <Button x:Name="brwsBtnSettings" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSettings_Click" Grid.Column="3"/>
-                    <Button x:Name="brwsBtnSaveSettings" Content="{Binding RelLanguage.BtnOpen, Mode=OneWay, FallbackValue=[Open]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSaveSettings_Click" Grid.Column="2"/>
+                    <Button x:Name="brwsBtnSettings" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSettings_Click" Grid.Column="4"/>
+                    <Button x:Name="brwsBtnSaveSettings" Content="{Binding RelLanguage.BtnOpen, Mode=OneWay, FallbackValue=[Open]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnSaveSettings_Click" Grid.Column="3"/>
                     <TextBlock HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" Text="{Binding RelLanguage.LblOutputMap, Mode=OneWay, FallbackValue=[Output map:]}" VerticalAlignment="Center" FontSize="14" Grid.Row="2"/>
-                    <ComboBox x:Name="txtOutMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="2"/>
-                    <Button x:Name="brwsBtnOutMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnOutMap_Click" Grid.Column="3" Grid.Row="2"/>
-                    <Button x:Name="btnOpenMap" Content="{Binding RelLanguage.BtnLoad, Mode=OneWay, FallbackValue=[Load]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="btnOpenMap_Click" Grid.Column="2" Grid.Row="1"/>
-                    <CheckBox x:Name="checkRepack" Content="{Binding RelLanguage.lblRepack, Mode=OneWay, FallbackValue=[Repack]}" Grid.Column="2" Margin="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
-
-
+                    <ComboBox x:Name="txtOutMap" Height="25" Margin="5,0" VerticalAlignment="Center" FontSize="14" IsEditable="True" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1"/>
+                    <Button x:Name="brwsBtnOutMap" Content="{Binding RelLanguage.BtnBrowse, Mode=OneWay, FallbackValue=[Browse]}" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="brwsBtnOutMap_Click" Grid.Column="4" Grid.Row="2"/>
+                    <Button x:Name="btnOpenMap" Content="{Binding RelLanguage.BtnLoad, Mode=OneWay, FallbackValue=[Load]}" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="80" RenderTransformOrigin="-0.093,-0.612" Height="25" FontSize="14" Click="btnOpenMap_Click" Grid.Column="3" Grid.Row="1"/>
+                    <CheckBox x:Name="checkRepack" Content="{Binding RelLanguage.lblRepack, Mode=OneWay, FallbackValue=[Repack]}" Grid.Column="3" Margin="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <ComboBox x:Name="txtInputEncoding" Height="25" IsEnabled="{Binding ElementName=checkRepack, Path=IsEnabled, Mode=OneWay}" MinWidth="80" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="14" IsEditable="False" Grid.Column="2" Grid.Row="1" ItemsSource="{Binding EncodingList}" SelectedItem="{Binding InputEncoding}"/>
+                    <ComboBox x:Name="txtOutputEncoding" Height="25" IsEnabled="{Binding ElementName=btnRun, Path=IsEnabled, Mode=OneWay}" MinWidth="80" Margin="0,0,5,0" VerticalAlignment="Center" FontSize="14" IsEditable="False" Grid.Column="2" Grid.Row="2" ItemsSource="{Binding EncodingList}" SelectedItem="{Binding OutputEncoding}"/>
                 </Grid>
+                
                 <Grid x:Name="grdCheckCond" Margin="0" Grid.Row="1" Visibility="Collapsed">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
@@ -59,6 +60,7 @@
                         <ColumnDefinition x:Name="udpW2" Width="{Binding ElementName=filesControlCol2, Path=ActualWidth}"/>
                         <ColumnDefinition x:Name="udpW3" Width="{Binding ElementName=filesControlCol3, Path=ActualWidth}"/>
                         <ColumnDefinition x:Name="udpW4" Width="{Binding ElementName=filesControlCol4, Path=ActualWidth}"/>
+                        <ColumnDefinition x:Name="udpW5" Width="{Binding ElementName=filesControlCol5, Path=ActualWidth}"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Margin="0,0,0,1" TextWrapping="Wrap" Text="{Binding RelLanguage.LblGuard, Mode=OneWay, FallbackValue=[Guard:]}" VerticalAlignment="Center" FontSize="14" HorizontalAlignment="Right"/>
                     <Grid Grid.Column="1" Grid.ColumnSpan="2">
@@ -117,7 +119,7 @@
         <GroupBox Margin="10,0,10,10" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Height="46" Header="{Binding RelLanguage.WinProcess, Mode=OneWay, FallbackValue=[Process]}">
             <Grid>
                 <Button x:Name="btnRun" Content="{Binding RelLanguage.BtnRun, Mode=OneWay, FallbackValue=[Run]}" HorizontalAlignment="Right" Width="75" Margin="0,0,0,2" Click="btnRun_Click"/>
-                <ComboBox x:Name="comboRunLanguage" HorizontalAlignment="Right" Margin="0,0,80,0" VerticalAlignment="Top" Width="134"/>
+                <ComboBox x:Name="comboRunLanguage" HorizontalAlignment="Right" Margin="0,0,80,0" VerticalAlignment="Top" Width="134" SelectionChanged="comboRunLanguage_SelectionChanged"/>
                 <TextBlock x:Name="label" Text="{Binding RelLanguage.LblLanguage, Mode=OneWay, FallbackValue=[Language]}" HorizontalAlignment="Right" Margin="0,3,218,0" VerticalAlignment="Top" Height="18" RenderTransformOrigin="0.704,0.778"/>
                 <ProgressBar Visibility="Collapsed" x:Name="progress" HorizontalAlignment="Left" Height="18" Margin="0,3,0,0" VerticalAlignment="Top" Width="411" IsIndeterminate="True"/>
             </Grid>

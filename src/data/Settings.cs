@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using TranslatorUI;
+using static TranslatorUI.MainWindow;
 
 namespace TranslatorData {
-        public class Settings {
 
-        public static readonly String defaultEncoding = "UTF-8";
+    public class Settings {
+
+        public static Encoding defaultEncoding = Encoding.UTF8;
 
         public String settingsPath;
         public String inpuPath;
         public String outputPath;
 
         public String[] langauges;
-        public String[] encodings;
+        public Encoding[] encodings;
         public String[][] strings;
 
         public int[] lastKnownMapping;
 
-        public String originalEncoding;
+        public Encoding originalEncoding;
 
         public String[] originalStrings;
 
@@ -35,41 +39,22 @@ namespace TranslatorData {
         private static Settings loadVersioned(byte[] bytes, String fileName) {
             Settings s = new Settings();
             s.settingsPath = fileName;
-            try {
-                ReadBuffer rb = new ReadBuffer(bytes);
+            ReadBuffer rb = new ReadBuffer(bytes);
 
-                String ver = rb.readString(defaultEncoding);
-                if (ver == "version") {
-                    int verNumber = rb.readInt();
-                    if (verNumber == 1) {
-                        s.inpuPath = rb.readString(defaultEncoding);
-                        s.outputPath = rb.readString(defaultEncoding);
+            String ver = rb.readString(defaultEncoding);
+            if (ver == "version") {
+                int verNumber = rb.readInt();
+                if (verNumber == 1) {
+                    s.inpuPath = rb.readString(defaultEncoding);
+                    s.outputPath = rb.readString(defaultEncoding);
 
-                        s.langauges = rb.readStringArray(defaultEncoding);
-                        s.encodings = rb.readStringArray(defaultEncoding);
+                    s.langauges = rb.readStringArray(defaultEncoding);
 
-                        s.strings = rb.readStringArrayArray(s.encodings);
+                    string[] encodingNames = rb.readStringArray(defaultEncoding);
+                    s.encodings = new Encoding[encodingNames.Length];
 
-                        s.useCondition = rb.readInt();
-                        s.lastKnownMapping = rb.readIntArray(rb.readInt());
-
-                        s.originalEncoding = rb.readString(defaultEncoding);
-                        s.originalStrings = rb.readStringArray(s.originalEncoding);
-
-                        s.repack = rb.readBool();
-                    }
-
-                } else { // Load vanilla settings and generate rest
-                    rb = new ReadBuffer(bytes);
-                    String encoding = "EUC-KR";
-
-                    s.inpuPath = rb.readString(encoding);
-                    s.outputPath = rb.readString(encoding);
-
-                    s.langauges = rb.readStringArray(encoding);
-                    s.encodings = new string[s.langauges.Length];
-                    for (int i = 0; i < s.encodings.Length; i++) {
-                        s.encodings[i] = encoding;
+                    for (int i = 0; i < encodingNames.Length; i++) {
+                        s.encodings[i] = NamedEncoding.GetForName(encodingNames[i]).Encoding;
                     }
 
                     s.strings = rb.readStringArrayArray(s.encodings);
@@ -77,35 +62,53 @@ namespace TranslatorData {
                     s.useCondition = rb.readInt();
                     s.lastKnownMapping = rb.readIntArray(rb.readInt());
 
-                    s.originalEncoding = encoding;
-
+                    s.originalEncoding = NamedEncoding.GetForName(rb.readString(defaultEncoding)).Encoding;
                     s.originalStrings = rb.readStringArray(s.originalEncoding);
-                }
 
-
-
-                // New ver
-                try {
                     s.repack = rb.readBool();
-                } catch (Exception) {
                 }
-                return s;
-            } catch (Exception) {
-                return null;
+
+            } else { // Load vanilla settings and generate rest
+                rb = new ReadBuffer(bytes);
+                s.inpuPath = rb.readString(Settings.defaultEncoding);
+                s.outputPath = rb.readString(Settings.defaultEncoding);
+
+                s.langauges = rb.readStringArray(Settings.defaultEncoding);
+                s.encodings = new Encoding[s.langauges.Length];
+                for (int i = 0; i < s.encodings.Length; i++) {
+                    s.encodings[i] = Settings.defaultEncoding;
+                }
+
+                s.strings = rb.readStringArrayArray(s.encodings);
+
+                s.useCondition = rb.readInt();
+                s.lastKnownMapping = rb.readIntArray(rb.readInt());
+
+                s.originalEncoding = Settings.defaultEncoding;
+
+                s.originalStrings = rb.readStringArray(s.originalEncoding);
             }
+
+                
+
+            // New ver
+            try {
+                s.repack = rb.readBool();
+            } catch (Exception) {
+            }
+            return s;
         }
 
         public static Settings loadFromFile(String fileName) {
             try {
-                byte[] bytes = File.ReadAllBytes(fileName);
-                Settings s = loadVersioned(bytes, fileName);
-                for (int i = 0; i < s.encodings.Length; i++) {
-                    s.encodings[i] = Settings.defaultEncoding;
+                if (File.Exists(fileName)) {
+                    byte[] bytes = File.ReadAllBytes(fileName);
+                    Settings s = loadVersioned(bytes, fileName);
+                    return s;
                 }
-                s.originalEncoding = Settings.defaultEncoding;
-                return s;
-            } catch (Exception) {
                 return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
@@ -119,7 +122,13 @@ namespace TranslatorData {
                 wb.writeString(this.outputPath, defaultEncoding);
 
                 wb.writeArray(this.langauges, defaultEncoding);
-                wb.writeArray(this.encodings, defaultEncoding);
+
+                string[] encodingNames = new string[this.encodings.Length];
+                for(int i =0; i < this.encodings.Length; i++) {
+                    encodingNames[i] = this.encodings[i].EncodingName;
+                }
+
+                wb.writeArray(encodingNames, defaultEncoding);
 
                 wb.writeArrayArray(this.strings, this.encodings);
 
@@ -128,7 +137,7 @@ namespace TranslatorData {
                 wb.writeInt(this.lastKnownMapping.Length);
                 wb.writeArray(this.lastKnownMapping);
 
-                wb.writeString(this.originalEncoding, defaultEncoding);
+                wb.writeString(this.originalEncoding.EncodingName, defaultEncoding);
                 wb.writeArray(this.originalStrings, this.originalEncoding);
 
                 wb.writeBool(this.repack);
@@ -140,7 +149,7 @@ namespace TranslatorData {
             }
         }
 
-        public static Settings getBlank(String file) {
+        public static Settings getBlank(String file, Encoding defaultEncoding) {
             Settings s = new Settings();
             s.settingsPath = file;
 
@@ -148,11 +157,11 @@ namespace TranslatorData {
             s.outputPath = "";
             s.langauges = new String[0];
             s.strings = new String[0][];
-            s.originalEncoding = Settings.defaultEncoding;
+            s.originalEncoding = defaultEncoding;
             s.useCondition = 0;
             s.lastKnownMapping = new int[0];
             s.originalStrings = new String[0];
-            s.encodings = new string[0];
+            s.encodings = new Encoding[0];
             return s;
         }
     }

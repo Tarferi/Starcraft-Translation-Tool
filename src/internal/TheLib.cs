@@ -128,12 +128,12 @@ namespace TranslatorData {
 #endif
         private static ProcessFunc _Process = null; // DLL Method
 
-        private static unsafe byte* toByteArray(String strStr, String encoding) {
+        private static unsafe byte* toByteArray(String strStr, Encoding encoding) {
             return toByteArray(strStr, null, encoding);
         }
 
-        private static unsafe byte* toByteArray(String strStr, int* outLength, String encoding) {
-            byte[] str = Encoding.GetEncoding(encoding).GetBytes(strStr);
+        private static unsafe byte* toByteArray(String strStr, int* outLength, Encoding encoding) {
+            byte[] str = encoding.GetBytes(strStr);
             if (str == null) {
                 return (byte*) 0;
             }
@@ -164,7 +164,7 @@ namespace TranslatorData {
             return bytes;
         }
 
-        private static unsafe byte* toByteArray(int[] data, String[] strArr, int* outLength, String encoding) {
+        private static unsafe byte* toByteArray(int[] data, String[] strArr, int* outLength, Encoding encoding) {
             int dataSize = 4; // Size of array
             byte*[] strPtrs = new byte*[strArr.Length];
             int[] strPtrsLengths = new int[strArr.Length];
@@ -272,7 +272,7 @@ namespace TranslatorData {
             return es.result == 0;
         }
 
-        private static MapString readMapString(UnsafeReadBuffer rb, String encoding) {
+        private static MapString readMapString(UnsafeReadBuffer rb, Encoding encoding) {
             MapString ms = new MapString();
 
             ms.mapIndex = rb.readInt();
@@ -293,7 +293,7 @@ namespace TranslatorData {
             return ms;
         }
 
-        public static unsafe MapString[] getStrings(String filePath, String encoding) {
+        public static unsafe MapString[] getStrings(String filePath, Encoding encoding) {
             TranslationStructure es = new TranslationStructure();
             es.action = (byte) 2;
             es.outputFilePath = (byte*) 0;

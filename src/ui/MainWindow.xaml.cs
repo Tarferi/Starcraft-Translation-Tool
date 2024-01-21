@@ -18,6 +18,7 @@ using System.Drawing;
 using static TranslatorData.StarcraftColors;
 using TranslatorData;
 using Settings = TranslatorData.Settings;
+using TranslatorUI.Properties;
 #if DEBUG_STR_REMAP
 using System.Diagnostics;
 #endif
@@ -44,6 +45,77 @@ namespace TranslatorUI {
         }
 
         public dynamic RelLanguage { get { return __lng; } set { __lng = value; } }
+
+        public class NamedEncoding {
+            public readonly Encoding Encoding;
+            public NamedEncoding(Encoding enc) {
+                this.Encoding = enc;
+            }
+            public override string ToString() {
+                return this.Encoding.EncodingName;
+            }
+
+            private static List<NamedEncoding> encodingList;
+            public static List<NamedEncoding> EncodingList {
+                get {
+                    if (encodingList == null) {
+                        encodingList = new List<NamedEncoding>();
+                        foreach (EncodingInfo info in Encoding.GetEncodings()) {
+                            encodingList.Add(new NamedEncoding(info.GetEncoding()));
+                        }
+                    }
+                    return encodingList;
+                }
+            }
+            public static NamedEncoding GetForName(string name) {
+                foreach(NamedEncoding e in EncodingList) {
+                    if(e.Encoding.EncodingName == name) {
+                        return e;
+                    }
+                }
+                throw new Exception("Unknown encoding: " + name);
+            }
+        }
+
+        public List<NamedEncoding> EncodingList { get => NamedEncoding.EncodingList; }
+
+        public NamedEncoding InputEncoding {
+            get {
+                if (this.settings == null) {
+                    return NamedEncoding.GetForName(Settings.defaultEncoding.EncodingName);
+                } else {
+                    return NamedEncoding.GetForName(this.settings.originalEncoding.EncodingName);
+                }
+            }
+            set {
+                if (this.settings != null && value != null) {
+                    this.settings.originalEncoding = value.Encoding;
+                }
+            }
+        }
+        
+        public NamedEncoding OutputEncoding {
+            get {
+                if (this.settings == null) {
+                    return null;
+                } else {
+                    int index = comboRunLanguage.SelectedIndex;
+                    if (index < 0) {
+                        return null;
+                    }
+                    return NamedEncoding.GetForName(this.settings.encodings[index].EncodingName);
+                }
+            }
+            set {
+                if (this.settings != null && value != null) {
+                    int index = comboRunLanguage.SelectedIndex;
+                    if (index >= 0) {
+                        this.settings.encodings[index] = value.Encoding;
+                    }
+                }
+            }
+        }
+        
 
         private LanguageManager lngs;
 
@@ -334,6 +406,9 @@ namespace TranslatorUI {
                 comboRunLanguage.SelectedIndex = 0;
             }
             checkRepack.IsChecked = settings.repack;
+
+            txtInputEncoding.SelectedValue = null;
+            txtInputEncoding.SelectedValue = InputEncoding;
         }
 
         private static int getInt(String str) {
@@ -377,37 +452,6 @@ namespace TranslatorUI {
             settings.repack = (bool) checkRepack.IsChecked;
 
             TranslateString[] strings = getCurrentStrings();
-            /*
-             
-            int[] lastValues = new int[strings.Length];
-             for(int i =0; i < strings.Length; i++) {
-                lastValues[i] = strings[i].StringIndex;
-            }
-            settings.lastKnownMapping = lastValues;
-            */
-            /*
-            // Get languages
-            if (tblTrans.Columns.Count >= 3) {
-                int languages = tblTrans.Columns.Count - 3;
-                settings.langauges = new String[languages];
-                settings.strings = new String[languages][];
-                for (int i = 0; i < languages; i++) {
-                    String languageName = tblTrans.Columns[3 + i].Header.ToString();
-                    settings.langauges[i] = languageName;
-                    settings.strings[i] = new String[strings.Length];
-                    for (int o = 0; o < strings.Length; o++) {
-                        String str = TranslateString.unescape(strings[o].translations[i]);
-                        if (str == null) {
-                            str = "";
-                        }
-                        settings.strings[i][o] = str;
-                    }
-                }
-            } else {
-                settings.langauges = new String[0]; // Some default values
-                settings.strings = new String[0][];
-            }
-            */
 
             if ((bool) rdDeaths.IsChecked) {
                 int playerID = cmbDeathsP.SelectedIndex;
@@ -894,7 +938,7 @@ namespace TranslatorUI {
             Settings set = Settings.loadFromFile(fileName);
             if (set == null) { // Failed to load
                 if (showConfirmWarning(RelLanguage.WinLoadSettings, RelLanguage.LblNewSettingsCreate)) {
-                    set = Settings.getBlank(fileName);
+                    set = Settings.getBlank(fileName, InputEncoding.Encoding);
                     if (!set.saveToFile(fileName)) {
                         showErrorMessageBox(RelLanguage.WinSaveSettings, RelLanguage.ErrFailedToCreateSettings);
                     } else {
@@ -1061,9 +1105,32 @@ namespace TranslatorUI {
             applyFilters();
         }
 
+        private void addNewTranslationToSettings(String languageName, String[] translationData, Encoding encoding) {
+            String[] newLanguages = new String[settings.langauges.Length + 1];
+            Encoding[] newEncodings = new Encoding[settings.encodings.Length + 1];
+            for (int i = 0; i < settings.langauges.Length; i++) {
+                newLanguages[i] = settings.langauges[i];
+                newEncodings[i] = settings.encodings[i];
+            }
+            newLanguages[newLanguages.Length - 1] = languageName;
+            newEncodings[newEncodings.Length - 1] = encoding;
+            settings.langauges = newLanguages;
+            settings.encodings = newEncodings;
+
+            // Update string array
+            String[][] newStrings = new String[settings.strings.Length + 1][];
+            for (int i = 0; i < settings.strings.Length; i++) {
+                newStrings[i] = settings.strings[i];
+            }
+            newStrings[newStrings.Length - 1] = translationData;
+            settings.strings = newStrings;
+
+            setSettings(settings);
+        }
+
         private void createNewLangaugeCB(String languageName, String copyOf) {
             Settings settings = getSettings();
-            String newEncoding = Settings.defaultEncoding;
+            Encoding newEncoding = Settings.defaultEncoding;
 
             // Check langauge unuqie
             for (int i = 0; i < settings.langauges.Length; i++) {
@@ -1103,26 +1170,7 @@ namespace TranslatorUI {
 
             // Have translation data, store in settings and reload
             // Update languages array
-            String[] newLanguages = new String[settings.langauges.Length + 1];
-            String[] newEncodings = new string[settings.encodings.Length + 1];
-            for (int i = 0; i < settings.langauges.Length; i++) {
-                newLanguages[i] = settings.langauges[i];
-                newEncodings[i] = settings.encodings[i];
-            }
-            newLanguages[newLanguages.Length - 1] = languageName;
-            newEncodings[newEncodings.Length - 1] = newEncoding;
-            settings.langauges = newLanguages;
-            settings.encodings = newEncodings;
-
-            // Update string array
-            String[][] newStrings = new String[settings.strings.Length + 1][];
-            for (int i = 0; i < settings.strings.Length; i++) {
-                newStrings[i] = settings.strings[i];
-            }
-            newStrings[newStrings.Length - 1] = translationData;
-            settings.strings = newStrings;
-
-            setSettings(settings);
+            addNewTranslationToSettings(languageName, translationData, newEncoding);
         }
 
         private void button1_Click(object sender, RoutedEventArgs e) {
@@ -1149,7 +1197,7 @@ namespace TranslatorUI {
 
                         // First update language array
                         String[] newLanguages = new String[settings.langauges.Length - 1];
-                        String[] newEncodings = new String[settings.encodings.Length - 1];
+                        Encoding[] newEncodings = new Encoding[settings.encodings.Length - 1];
                         for (int o = 0; o < i; o++) {
                             newLanguages[o] = settings.langauges[o];
                             newEncodings[o] = settings.encodings[o];
@@ -1529,8 +1577,12 @@ namespace TranslatorUI {
 
                     Func<int, int, string> cell = (int x, int y) => numToAlpha(x) + y.ToString();
 
+                    Func<string, string> escapeNewLines = (string str) => {
+                        return str.Replace("\r", "").Replace("\n", "<13>");
+                    };
+
                     Func<int, int, string, StringOrigin, bool> cellContains = (int x, int y, string str, StringOrigin origin) => {
-                        String restr = unescaper(worksheet.Cells[cell(x, y)], origin).Replace("\r", "").Replace("\n", "<13>");
+                        String restr = escapeNewLines(unescaper(worksheet.Cells[cell(x, y)], origin));
                         if (restr == str) {
                             return true;
                         } else {
@@ -1551,8 +1603,8 @@ namespace TranslatorUI {
                         TranslateString str = settings.ts[i];
                         StringOrigin origin = originResolver(str);
                         isOurs &= cellContains(1, 2 + i, str.StringIndex.ToString(), origin);
-                        isOurs &= cellContains(2, 2 + i, str.OriginalContents.Replace("\r\n", "<13>"), origin);
-                        isOurs &= cellContains(3, 2 + i, str.description.Replace("\r\n", "<13>"), origin);
+                        isOurs &= cellContains(2, 2 + i, escapeNewLines(str.OriginalContents), origin);
+                        isOurs &= cellContains(3, 2 + i, escapeNewLines(str.description), origin);
                         if (!isOurs) {
                             errors.Add(RelLanguage.LblOriginalDataCorrupted);
                             break;
@@ -1579,33 +1631,27 @@ namespace TranslatorUI {
                         return;
                     }
 
+                    String[] translationData = new string[settings.originalStrings.Length];
+                    for (int i = 0; i < settings.originalStrings.Length; i++) {
+                        StringOrigin origin = originResolver(settings.ts[i]);
+                        translationData[i] = unescaper(worksheet.Cells[cell(4, 2 + i)], origin).Replace("<13>", "\r\n");
+                    }
+
                     // Find languageID
-                    String[] newLanguages = new String[settings.langauges.Length + 1];
-                    String[][] newStrings = new String[settings.langauges.Length + 1][];
                     int languageID = settings.langauges.Length;
                     for (int i = 0; i < settings.langauges.Length; i++) {
                         if (settings.langauges[i] == translation) {
                             languageID = i;
-                            newLanguages = settings.langauges;
-                            newStrings = settings.strings;
-                            break;
-                        } else {
-                            newLanguages[i] = settings.langauges[i];
-                            newStrings[i] = settings.strings[i];
                         }
                     }
-
-                    newLanguages[languageID] = translation;
-                    newStrings[languageID] = new String[settings.originalStrings.Length];
-
-                    for (int i = 0; i < settings.originalStrings.Length; i++) {
-                        StringOrigin origin = originResolver(settings.ts[i]);
-                        newStrings[languageID][i] = unescaper(worksheet.Cells[cell(4, 2 + i)], origin).Replace("<13>", "\r\n");
+                    if (languageID == settings.langauges.Length) {
+                        // We are not updating existing language
+                        addNewTranslationToSettings(translation, translationData, settings.originalEncoding);
+                    } else {
+                        // We are updating existing language
+                        settings.strings[languageID] = translationData;
+                        setSettings(settings);
                     }
-
-                    settings.langauges = newLanguages;
-                    settings.strings = newStrings;
-
                     setStrings(settings);
                     MessageBox.Show(RelLanguage.LblImportFinished, RelLanguage.WinImport, MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -1635,6 +1681,11 @@ namespace TranslatorUI {
             udpW3.Width = new GridLength(filesControlCol3.ActualWidth, GridUnitType.Pixel);
             udpW4.Width = new GridLength(filesControlCol4.ActualWidth, GridUnitType.Pixel);
 
+        }
+
+        private void comboRunLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            txtOutputEncoding.SelectedValue = null;
+            txtOutputEncoding.SelectedValue = OutputEncoding;
         }
     }
 

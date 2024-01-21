@@ -58,7 +58,7 @@ namespace TranslatorData {
             return (((long) readInt()) << 32) | (((long) readInt()) << 0);
         }
 
-        public String[][] readStringArrayArray(String[] encodings) {
+        public String[][] readStringArrayArray(Encoding[] encodings) {
             List<String[]> lst = new List<String[]>();
             int length = readInt();
             for (int i = 0; i < length; i++) {
@@ -74,7 +74,7 @@ namespace TranslatorData {
             return strs;
         }
 
-        public String[] readStringArray(String encoding) {
+        public String[] readStringArray(Encoding encoding) {
             List<String> lst = new List<String>();
             int length = readInt();
             for (int i = 0; i < length; i++) {
@@ -102,8 +102,8 @@ namespace TranslatorData {
             return bytes;
         }
 
-        public String readString(String encoding) {
-            String str = Encoding.GetEncoding(encoding).GetString(readByteArray());
+        public String readString(Encoding encoding) {
+            String str = encoding.GetString(readByteArray());
             return str;
         }
 
